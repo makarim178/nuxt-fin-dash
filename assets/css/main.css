@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+@import '@nuxt/ui';
+
+@theme {
+    --font-display: "Inter", "sans-serif";
+}
+
+@layer base {
+    body {
+        @apply bg-slate-950;
+    }
+}
