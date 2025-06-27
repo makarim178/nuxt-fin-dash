@@ -1,12 +1,10 @@
 @import 'tailwindcss';
 @import '@nuxt/ui';
 
-@theme {
-    --font-display: "Inter", "sans-serif";
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
     body {
-        @apply bg-slate-950;
+        @apply bg-white dark:bg-slate-950;
     }
 }
