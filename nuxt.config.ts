@@ -17,5 +17,10 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxt/icon',
     '@nuxtjs/color-mode'
-  ]
+  ],
+  runtimeConfig: {
+    public: {
+      userApiUrl: process.env.USER_API_URL || ''
+    }
+  }
 })

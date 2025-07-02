@@ -1,16 +1,17 @@
 <template>
     <USwitch
-        :label="getLabel()"
+        label="Theme"
         size="xl"
         class="pl-3"
-        v-model="value"
-        @click="setColorTheme($colorMode.preference === 'dark' ? 'light' : 'dark')"
+        v-model="switchValue"
+        @click="setTheme"
     />
 </template>
 
 <script setup lang="ts">
-type Theme = 'light' | 'dark'
-const value = ref(true)
-const setColorTheme = (newTheme: Theme) => useColorMode().preference = newTheme
-const getLabel = () => `${useUtilities().capitlizeWord(useColorMode().preference)} Theme`
+const switchValue = ref(useColorMode().preference === 'light')
+const setTheme = () => {
+    switchValue.value = !switchValue.value
+    useColorMode().preference = switchValue.value ? 'light' : 'dark'
+}
 </script>
