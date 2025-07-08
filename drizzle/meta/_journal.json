@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1751611996726,
+      "tag": "0000_fuzzy_mantis",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1751617975277,
+      "tag": "0001_simple_warpath",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1751619863774,
+      "tag": "0002_bouncy_switch",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1751966114724,
+      "tag": "0003_new_blue_blade",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1751966459322,
+      "tag": "0004_mean_yellow_claw",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1751966671886,
+      "tag": "0005_faithful_firelord",
+      "breakpoints": true
+    }
+  ]
+}

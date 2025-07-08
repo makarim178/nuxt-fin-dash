@@ -1,6 +1,6 @@
 <template>
     <header>
-        <div class="flex dark:bg-slate-900/40 py-4 px-8 rounded-2xl justify-between items-center">
+        <div class="flex dark:bg-default dash-container">
             <div>
                 <h1 class="dark:text-white font-extrabold">
                     {{ getTitle() }}

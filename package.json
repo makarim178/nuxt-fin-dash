@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@libsql/client": "^0.15.9",
     "@nuxt/eslint": "^1.4.1",
     "@nuxt/fonts": "^0.11.4",
     "@nuxt/icon": "^1.14.0",
@@ -18,10 +19,17 @@
     "@nuxt/ui": "^3.2.0",
     "@nuxtjs/color-mode": "^3.5.2",
     "@tailwindcss/vite": "^4.1.10",
+    "better-sqlite3": "^12.2.0",
+    "drizzle-orm": "^0.44.2",
     "eslint": "^9.29.0",
     "nuxt": "^3.17.5",
+    "nuxt-charts": "^0.1.11",
     "tailwindcss": "^4.1.10",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "drizzle-kit": "^0.31.4"
   }
 }

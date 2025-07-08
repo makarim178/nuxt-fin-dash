@@ -8,3 +8,13 @@
         @apply bg-white dark:bg-slate-950;
     }
 }
+
+@layer utilities {
+    .bg-default {
+        @apply dark:bg-slate-900/40;
+    }
+
+    .dash-container {
+        @apply py-4 px-8 rounded-2xl justify-between items-center;
+    }
+}

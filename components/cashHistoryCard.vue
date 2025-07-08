@@ -23,10 +23,8 @@ type CashHistoryPropsType = {
         title: string
         balance: string
         change: string
-        isSelected: boolean
     }
-const { title, balance, change, isSelected } = defineProps<CashHistoryPropsType>()
-
+const { title, balance, change } = defineProps<CashHistoryPropsType>()
 const getChangeText = () => {
     const info = 'last month'
     if (+change > 0 ) return `+${change} Higher than ${info}` 
@@ -50,7 +48,7 @@ const getGraphColor = () => {
     return 'bg-blue-600'
 }
 
-const getBorder = () => isSelected ? 'border-1 border-blue-500/80' : ''
+const getBorder = () => useCurrentAccountSelection().getCurrentFocus() === title ? 'border-1 border-blue-500/80' : ''
 const getBackgroundColor = () => {
     let bgStyles = 'from-slate-900 to-blue-950/50'
     if (+change > 0) bgStyles = `from-slate-900 to-green-800/50`
