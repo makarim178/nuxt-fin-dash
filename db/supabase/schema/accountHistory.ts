@@ -20,3 +20,6 @@ export const accountsOverviewReport = pgTable('accountOverviewReport', {
 
 export type AccountsOverviewReport = InferSelectModel<typeof accountsOverviewReport>
 export type InsertAccountsOverviewReport = InferInsertModel<typeof accountsOverviewReport>
+
+// 1	June	2025	24702.06	13123.03	38408.15	2025-07-04 07:11:41
+// 2	July	2025	25801.06	13500.05	35069.25	2025-07-04 07:14:06

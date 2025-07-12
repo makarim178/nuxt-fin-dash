@@ -2,14 +2,14 @@
     <div class="flex">
         <div class="flex flex-col gap-3">
             <div class="flex gap-4">
-                <!-- <CashHistoryCard 
+                <CashHistoryCard 
                     v-for="account in accountHistory"
                     :key="account.title"
                     :title="account.title" 
-                    :balance="account.balance" 
-                    :change="account.change" 
+                    :balance="account.totalBalance.toString()" 
+                    :change="account.change.toString()" 
                     @click="setFocus(account.title)"
-                /> -->
+                />
             </div>
             <div class="flex flex-col dash-container dark:bg-default">
                 <div class="flex justify-between w-full">
@@ -42,7 +42,10 @@
 </template>
 
 <script setup lang="ts">
-const { data: accountHistory} = useFetch('/api/account-history', {key: 'account-history'})
+const { data: accountHistory, pending } = useFetch('/api/account-history?userId=1', {
+    key: 'account-history',
+    transform: (accHistory: AccountsOverviewResultType[]): AccountsOverviewResultType[] => accHistory
+})
 const setFocus = (title: string) => useCurrentAccountSelection().setFocus(title)
 
 const colorMode = useColorMode()

@@ -129,4 +129,22 @@ declare global {
         address: UserAddressType[]
         role: UserRoleTypes
     }
+
+    type ChangeType = {
+        [key: string]: number
+    }
+
+    type AccountsOverviewQueryRow = {
+        [x: string]: any
+        month: number
+        year: number
+        issueType?: string
+        totalBalance: number
+    }
+
+    type AccountsOverviewResultType = AccountsOverviewQueryRow & {
+        change: number
+        title: string
+    }
 }
+

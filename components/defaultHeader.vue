@@ -34,7 +34,7 @@
 
 const route = useRoute()
 
-const { data: user, status, pending } = useLazyFetch(`/api/user`, {
+const { data: user, pending } = useLazyFetch(`/api/user`, {
     key: 'user',
     transform: (user: UserType) => {
         const { contacts, images, title, firstName, lastName } = user
