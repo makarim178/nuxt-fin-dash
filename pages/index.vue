@@ -2,14 +2,14 @@
     <div class="flex">
         <div class="flex flex-col gap-3">
             <div class="flex gap-4">
-                <CashHistoryCard 
+                <!-- <CashHistoryCard 
                     v-for="account in accountHistory"
                     :key="account.title"
                     :title="account.title" 
                     :balance="account.balance" 
                     :change="account.change" 
                     @click="setFocus(account.title)"
-                />
+                /> -->
             </div>
             <div class="flex flex-col dash-container dark:bg-default">
                 <div class="flex justify-between w-full">

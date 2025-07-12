@@ -1,0 +1,35 @@
+import { pgTable, serial, integer, varchar, uniqueIndex, index } from "drizzle-orm/pg-core";
+import { user } from "./user";
+import { cascadeOptions, creationFields, validityFields } from "./commonFields";
+import { relations, type InferInsertModel, type InferSelectModel } from "drizzle-orm";
+
+export const locations = pgTable('locations', {
+    id: serial('id').notNull().primaryKey(),
+    userId: integer('user_id').notNull().references(() => user.id, cascadeOptions),
+    streetNumber: varchar('street_number', { length: 6 }).notNull(),
+    streetName: varchar('street_name', { length: 500 }).notNull(),
+    postcode: varchar('postcode', { length: 6}).notNull(),
+    city: varchar('city', { length: 255}),
+    province: varchar('province', { length: 255 }),
+    country: varchar('country', { length : 255 }),
+    ...validityFields,
+    ...creationFields
+}, 
+(table) => [
+    index('street_number_index').on(table.streetNumber),
+    index('street_name_index').on(table.streetName),
+    index('postcode_index').on(table.postcode),
+    index('city_index').on(table.city),
+    index('province_index').on(table.province),
+    index('country_index').on(table.country)
+])
+
+export const locationRelations = relations(locations, ({ one }) => ({
+    user: one(user, {
+        fields: [locations.userId],
+        references: [user.id]
+    })
+}))
+
+export type Locations = InferSelectModel<typeof locations>
+export type InsertLocations = InferInsertModel<typeof locations>

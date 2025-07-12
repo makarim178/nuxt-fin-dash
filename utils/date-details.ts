@@ -4,7 +4,7 @@ type ReturnCurrPrevType = {
     previousMonth: string
 }
 
-type LocalMonthOptionType = { month: string}
+type LocalMonthOptionType = { month: 'long' | 'numeric' | '2-digit' | 'short' | 'narrow' | undefined }
 const currentDate = new Date()
 const dateOnPrevMonth = new Date(currentDate)
 dateOnPrevMonth.setDate(0)

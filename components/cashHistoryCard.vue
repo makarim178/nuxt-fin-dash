@@ -20,11 +20,11 @@
 
 <script setup lang="ts">
 type CashHistoryPropsType = {
-        title: string
+        title: string 
         balance: string
         change: string
     }
-const { title, balance, change } = defineProps<CashHistoryPropsType>()
+const { title = '', balance = '', change = '' } = defineProps<CashHistoryPropsType>()
 const getChangeText = () => {
     const info = 'last month'
     if (+change > 0 ) return `+${change} Higher than ${info}` 

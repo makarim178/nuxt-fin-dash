@@ -1,7 +1,15 @@
+import { getUser } from "~/db/supabase/queries/userQuery"
 import userData from "~/utils/user-data"
 
-export default defineEventHandler(async event => {
-    const config = useRuntimeConfig(event)    
-    const apiResponse:any = await $fetch(config.public.userApiUrl).then(res => res)
-    return userData(apiResponse.results[0])
-})
+export default defineEventHandler(async (event) => await getUser(1))
+// export default defineEventHandler(async (event) => {
+//     const user = await getUser(1)
+//     return new Promise((resolve) => {
+//         setTimeout(()=> resolve(user), 2000)
+//     })
+// })
+// export default defineEventHandler(async (event) => {
+//     const config = useRuntimeConfig(event)
+//     const apiResponse:any = await $fetch(config.public.userApiUrl).then(res => res)
+//     return userData(apiResponse.results[0])
+// })

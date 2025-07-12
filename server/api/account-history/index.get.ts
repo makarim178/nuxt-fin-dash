@@ -1,5 +1,5 @@
 import { db } from "~/server/sqlite-service"
-import { accountHistory } from '../../../db/schema'
+// import { accountHistory } from '../../../db/schema'
 import { getCurrentWithPrev } from '../../../utils/date-details' 
 import { or, and, eq, desc } from 'drizzle-orm'
 
@@ -39,20 +39,21 @@ export default defineEventHandler( async (event) => {
 
     const retrieveAccountHistoryFromDB = async () => {
         try {
-            const { year, currentMonth, previousMonth } = getCurrentWithPrev()
-            const accHisRespose: AccHistResponseType[] = await db
-                .select()
-                .from(accountHistory)
-                .where(and(
-                    eq(accountHistory.year, year.toString()),
-                    or(
-                        eq(accountHistory.month, currentMonth),
-                        eq(accountHistory.month, previousMonth)
-                    )
-                ))
-                .orderBy(desc(accountHistory.updatedAt))
+            return []
+            // const { year, currentMonth, previousMonth } = getCurrentWithPrev()
+            // const accHisRespose: AccHistResponseType[] = await db
+            //     .select()
+            //     .from(accountHistory)
+            //     .where(and(
+            //         eq(accountHistory.year, year.toString()),
+            //         or(
+            //             eq(accountHistory.month, currentMonth),
+            //             eq(accountHistory.month, previousMonth)
+            //         )
+            //     ))
+            //     .orderBy(desc(accountHistory.updatedAt))
 
-            return mapAccountHistory(accHisRespose[0], accHisRespose[1])
+            // return mapAccountHistory(accHisRespose[0], accHisRespose[1])
         } catch (error:any) {
             console.log(error)
             throw createError({

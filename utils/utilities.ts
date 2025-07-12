@@ -5,3 +5,7 @@ export function capitalizedWordsWithUnderscore (word: string): string {
         return acc
     }, '')
 }
+
+export function addElementToObject(arr: UserAddressType[] | ContactType[] | UserImageType[], object: Object): any[]{ 
+    return arr.map((element: Object) => ({ ...element, ...object}))
+}
