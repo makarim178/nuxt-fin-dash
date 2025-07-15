@@ -2,6 +2,8 @@ import { pgTable, serial, integer, varchar, uniqueIndex, index } from "drizzle-o
 import { user } from "./user";
 import { cascadeOptions, creationFields, validityFields } from "./commonFields";
 import { relations, type InferInsertModel, type InferSelectModel } from "drizzle-orm";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import type { z } from "zod/v4";
 
 export const userContacts = pgTable('userContacts', {
     id: serial('id').notNull().primaryKey(),
@@ -24,5 +26,10 @@ export const contactRelations = relations(userContacts, ({ one }) => ({
     })
 }))
 
-export type UserEmails = InferSelectModel<typeof userContacts>
-export type InsertUserEmails = InferInsertModel<typeof userContacts>
+export const userContactSchema = createSelectSchema(userContacts)
+export const insertUserContactSchema = createInsertSchema(userContacts, {
+    userId: (schema) => schema.min(1)
+})
+
+export type UserContactSchema = z.infer<typeof userContactSchema>
+export type InsertUserContactSchema = z.infer<typeof insertUserContactSchema> 

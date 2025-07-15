@@ -2,6 +2,8 @@ import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
 import { creationFields } from "./commonFields";
 import { relations, type InferInsertModel, type InferSelectModel } from "drizzle-orm";
 import { user } from "./user";
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
+import type { z } from "zod/v4";
 
 export const userRoleTypes = pgTable('userRoleTypes', {
     id: serial('id').notNull().primaryKey(),
@@ -16,5 +18,8 @@ export const roleTypesRelations = relations(userRoleTypes, ({ one }) => ({
     })
 }))
 
-export type UserRoleTypes = InferSelectModel<typeof userRoleTypes>
-export type InsertUserRoleTypes = InferInsertModel<typeof userRoleTypes>
+export const userRoleSchema = createSelectSchema(userRoleTypes)
+export type UserRoleSchema = z.infer<typeof userRoleSchema>
+
+export const insertUserRoleSchema = createInsertSchema(userRoleTypes)
+export type InsertUserRoleSchema = z.infer<typeof insertUserRoleSchema>

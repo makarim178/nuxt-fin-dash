@@ -1,10 +1,12 @@
 import { integer, pgTable, serial, index, varchar } from "drizzle-orm/pg-core";
 import { cascadeOptions, creationFields } from "./commonFields";
-import { userRoleTypes } from "./userRoleTypes";
+import { userRoleSchema, userRoleTypes } from "./userRoleTypes";
 import { relations, type InferInsertModel, type InferSelectModel } from "drizzle-orm";
-import { userImages } from "./userImages";
-import { locations } from "./locations";
-import { userContacts } from "./userContacts";
+import { userImages, userImageSchema } from "./userImages";
+import { locations, locationSchema } from "./locations";
+import { userContacts, userContactSchema } from "./userContacts";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { z } from "zod/v4";
 
 export const user = pgTable('user', {
     id: serial('id').notNull().primaryKey(),
@@ -29,5 +31,25 @@ export const userRelations = relations(user, ({one, many}) => ({
     locations: many(locations)
 }))
 
-export type User = InferSelectModel<typeof user>
-export type InsertUser = InferInsertModel<typeof user>
+export const userSchema = createSelectSchema(user, {
+    roleTypeId: (schema) => schema.min(1),
+})
+
+export const userWithRelations = userSchema.extend({
+    role: userRoleSchema,
+    images: z.array(userImageSchema),
+    contacts: z.array(userContactSchema),
+    locations: z.array(locationSchema)
+}) 
+
+export const insertUserSchema = createInsertSchema(user, {
+    roleTypeId: (schema) => schema.min(1)
+})
+
+export type UserSchema = z.infer<typeof userSchema>
+export type InsertUserSchema = z.infer<typeof insertUserSchema>
+export type UserWithRelationSchema = z.infer<typeof userWithRelations>
+
+// export type User = InferSelectModel<typeof user>
+// export type InsertUser = InferInsertModel<typeof user>
+

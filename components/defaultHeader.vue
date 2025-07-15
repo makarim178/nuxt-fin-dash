@@ -31,14 +31,19 @@
     </header>
 </template>
 <script setup lang="ts">
+import { userWithRelations
+    , type UserWithRelationSchema
+    , type UserContactSchema 
+} from '@@/db/supabase/schema';
+
 
 const route = useRoute()
 
 const { data: user, pending } = useLazyFetch(`/api/user`, {
     key: 'user',
-    transform: (user: UserType) => {
-        const { contacts, images, title, firstName, lastName } = user
-        const email = contacts.filter(({ contactType, isPrimary}) => contactType === 'email' && isPrimary)[0].contact
+    transform: (user: UserWithRelationSchema) => {
+        const { contacts, images, title, firstName, lastName } = userWithRelations.parse(user)
+        const email = contacts.filter(({ contactType, isPrimary}: UserContactSchema) => contactType === 'email' && isPrimary)[0].contact
         const titleName = `${title} ${lastName}, ${firstName}`
         return {
             titleName,

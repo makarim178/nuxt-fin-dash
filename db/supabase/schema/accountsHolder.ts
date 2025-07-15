@@ -1,8 +1,10 @@
 import { integer, pgTable, serial, uniqueIndex, varchar } from "drizzle-orm/pg-core";
 import { user } from "./user";
-import { accountsType } from "./accountsType";
+import { accountsType, accountsTypeSchema } from "./accountsType";
 import { cascadeOptions, creationFields } from "./commonFields";
 import { relations, type InferInsertModel, type InferSelectModel } from "drizzle-orm";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import type { z } from "zod/v4";
 
 export const accountsHolder = pgTable('accountsHolder', {
     id: serial('id').notNull().primaryKey(),
@@ -24,5 +26,15 @@ export const accountHoldersRelations = relations(accountsHolder, ({one}) => ({
     })
 }))
 
-export type AccountsHolder = InferSelectModel<typeof accountsHolder>
-export type InsertAccountsHolder = InferInsertModel<typeof accountsHolder>
+export const accountsHolderSchema = createSelectSchema(accountsHolder)
+export const insertAccountsHolderSchema = createInsertSchema(accountsHolder)
+export const accountsHolderWithRelationSchema = accountsHolderSchema.extend({
+    accountType: accountsTypeSchema
+})
+
+export type AccountsHolderSchema = z.infer<typeof accountsHolderSchema>
+export type InsertAccountsHolderSchema = z.infer<typeof insertAccountsHolderSchema>
+export type AccountsHolderWithRelationSchema = z.infer<typeof accountsHolderWithRelationSchema>
+
+// export type AccountsHolder = InferSelectModel<typeof accountsHolder>
+// export type InsertAccountsHolder = InferInsertModel<typeof accountsHolder>

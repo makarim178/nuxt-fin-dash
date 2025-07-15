@@ -2,7 +2,11 @@
     <div class="flex">
         <div class="flex flex-col gap-3">
             <div class="flex gap-4">
+                <div v-if="pending">
+                    <h1>Loading...</h1>
+                </div>
                 <CashHistoryCard 
+                    v-else
                     v-for="account in accountHistory"
                     :key="account.title"
                     :title="account.title" 
@@ -22,7 +26,7 @@
                         <Icon class="" name="mdi:chevron-down" size="10" />
                     </div>
                 </div>
-                <BarChart
+                <!-- <BarChart
                     class="w-full"
                     :key="colorMode.value"
                     :data="TransactionData"
@@ -35,7 +39,7 @@
                     :x-formatter="xFormatter"
                     :y-formatter="yFormatter"
                     :hide-legend="false"
-                />
+                /> -->
             </div>
         </div>
     </div>

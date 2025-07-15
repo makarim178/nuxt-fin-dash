@@ -1,8 +1,9 @@
 import { integer, pgTable, serial, real, date, timestamp } from "drizzle-orm/pg-core";
-import { user } from "./user";
+import { user, userSchema } from "./user";
 import { cascadeOptions, creationFields } from "./commonFields";
-import { payeeAccountsHolders } from "./payeeAccountsHolders";
+import { payeeAccountsHolders, payeeAccountsHolderSchema } from "./payeeAccountsHolders";
 import { relations, type InferInsertModel, type InferSelectModel } from "drizzle-orm";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const transactionHistory = pgTable('transactionHistory', {
     id: serial('id').notNull().primaryKey(),
@@ -24,8 +25,17 @@ export const transactionsRelations = relations(transactionHistory, ({one}) => ({
     })
 }))
 
-export type TransactionHistory = InferSelectModel<typeof transactionHistory>
-export type InsertTransactionHistory = InferInsertModel<typeof transactionHistory>
+export const transactionHistorySchema = createSelectSchema(transactionHistory)
+export const insertTransactionHistorySchema = createInsertSchema(transactionHistory)
+export const transactionHisWithRelationSchema = transactionHistorySchema.extend({
+    user: userSchema,
+    payee: payeeAccountsHolderSchema
+})
+
+// export type 
+
+// export type TransactionHistory = InferSelectModel<typeof transactionHistory>
+// export type InsertTransactionHistory = InferInsertModel<typeof transactionHistory>
 
 // 1	1	January	2025	103500
 // 2	2	February	2025	93500

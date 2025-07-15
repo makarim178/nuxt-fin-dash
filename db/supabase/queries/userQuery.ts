@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { user } from "../schema";
+import { user, type InsertUserSchema } from "../schema";
 import { db } from "~/server/db-services";
 
 export const getUser = async (userId: number) => {
@@ -14,5 +14,5 @@ export const getUser = async (userId: number) => {
     })
 }
 
-export const addUser = async (values: InsertUserType): Promise<{userId: number}[]> => 
+export const addUser = async (values: InsertUserSchema): Promise<{userId: number}[]> => 
     await db.transaction(async (t) => await t.insert(user).values(values).returning({ userId: user.id}))

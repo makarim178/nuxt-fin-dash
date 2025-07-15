@@ -2,6 +2,8 @@ import { pgTable, serial, varchar, integer, index, uniqueIndex } from "drizzle-o
 import { cascadeOptions, creationFields, validityFields } from "./commonFields";
 import { user } from "./user";
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import type { z } from "zod/v4";
 
 export const payeeAccountsHolders = pgTable('payeeAccountsHolders', {
     id: serial('id').notNull().primaryKey(),
@@ -18,5 +20,13 @@ export const payeeAccountsHolders = pgTable('payeeAccountsHolders', {
     uniqueIndex('account_number_index').on(table.accountNumber)
 ])
 
-export type PayeeAccountsHolders = InferSelectModel<typeof payeeAccountsHolders>
-export type InsertPayeeAccountsHolders = InferInsertModel<typeof payeeAccountsHolders>
+export const payeeAccountsHolderSchema = createSelectSchema(payeeAccountsHolders)
+export const insertPayeeAccountsHolderSchema = createInsertSchema(payeeAccountsHolders)
+
+export type PayeeAccountsHolderSchema = z.infer<typeof payeeAccountsHolderSchema>
+export type InsertPayeeAccountsHolders = z.infer<typeof insertPayeeAccountsHolderSchema>
+
+
+
+// export type PayeeAccountsHolders = InferSelectModel<typeof payeeAccountsHolders>
+// export type InsertPayeeAccountsHolders = InferInsertModel<typeof payeeAccountsHolders>
