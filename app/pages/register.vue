@@ -1,0 +1,97 @@
+<script lang="ts" setup>
+import type { FormSubmitEvent } from '@nuxt/ui';
+import { userAuthRegisterSchema } from '../../shared/types';
+import type { TitleSchema, UserAuthRegisterSchema } from '../../shared/types';
+
+const titleRef = ref<TitleSchema[]>(['Mr.', 'Ms.', 'Mrs.'])
+
+const state = reactive<Partial<UserAuthRegisterSchema>>({
+  title: 'Mr.',
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  confirmPassword: ''
+})
+
+const toast = useToast()
+const client = useSupabaseClient()
+
+const onSubmit = async (event: FormSubmitEvent<UserAuthRegisterSchema>) => {
+  try {
+    const { data, error } = await client.auth.signUp({      
+      email: event.data.email, 
+      password: event.data.password      
+    })
+    if (error) throw error
+    console.log(data)
+    toast.add({ title: 'Success', description: 'Please check your email and confirm registration!', color: 'success' })
+  } catch (error) {
+    const description = handleToastErrorMsg(error)
+    toast.add({
+      title: 'Failed',
+      color: 'error',
+      description
+    })
+  }
+}
+</script>
+
+<template>
+  <UCard variant="subtle" class="w-1/2">
+    <template #header>
+      <h4>User Registration</h4>
+    </template>
+    <UForm 
+      :schema="userAuthRegisterSchema"
+      :state="state"
+      class="space-y-4 w-full"
+      @submit="onSubmit">
+        <div class="flex w-full gap-2">
+          <UFormField label="Title" name="title">
+            <USelect v-model="state.title" :items="titleRef" class="w-24" color="success" 
+            variant="outline" 
+            :ui="{
+              content: 'bg-slate-800/90'
+            }"/>
+          </UFormField>
+          <UFormField label="First Name" name="firstName" class="w-1/2">
+            <UInput v-model="state.firstName" class="w-full"/>
+          </UFormField>
+          <UFormField label="Last Name" name="lastName" class="w-1/2">
+            <UInput v-model="state.lastName" class="w-full"/>
+          </UFormField>
+        </div>
+      <UFormField 
+        label="Email" 
+        name="email">
+        <UInput 
+          v-model="state.email" 
+          class="w-full"/>
+      </UFormField>
+      <UFormField 
+        label="Password" 
+        name="password">
+        <UInput 
+          v-model="state.password" 
+          type="password" 
+          class="w-full"/>
+      </UFormField>
+      <UFormField 
+        label="Confirm Password" 
+        name="confirmPassword">
+        <UInput 
+          v-model="state.confirmPassword" 
+          type="password" 
+          class="w-full"/>
+      </UFormField>
+      <div class="flex justify-end">
+        <UButton type="submit" size="xl">Register</UButton>
+      </div>
+    </UForm>
+    <template #footer>
+      <h4>Please <NuxtLink to="/login" class="text-blue-300 hover:text-blue-600">login</NuxtLink> if you are an existing user.</h4>
+    </template>
+  </UCard>
+</template>
+

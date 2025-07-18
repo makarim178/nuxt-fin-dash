@@ -1,11 +1,22 @@
-import { addContacts } from "~/db/supabase/queries/contactsQuery"
-import { addLocations } from "~/db/supabase/queries/locationsQuery"
-import { addUserImages } from "~/db/supabase/queries/userImageQuery"
-import { addUser, getUser } from "~/db/supabase/queries/userQuery"
-import { insertLocationSchema, InsertUserContactSchema, insertUserContactSchema, insertUserImageSchema, insertUserSchema } from "~/db/supabase/schema"
-import { db } from "~/server/db-services"
+import { addContacts } from "~~/server/supabase/queries/contactsQuery"
+import { addLocations } from "~~/server/supabase/queries/locationsQuery"
+import { addUserImages } from "~~/server/supabase/queries/userImageQuery"
+import { addUser, getUser } from "~~/server/supabase/queries/userQuery"
+import { 
+    insertLocationSchema, 
+    insertUserContactSchema, 
+    insertUserImageSchema, 
+    insertUserSchema } from "#shared/types"
+import { db } from "~~/server/db-services"
+import { z } from "zod/v4"
 
-export default defineEventHandler (async event => {
+const requestBodySchema = insertUserSchema.extend({
+    address: z.array(insertLocationSchema),
+    contacts: z.array(insertUserContactSchema),
+    images: z.array(z.string())
+})
+
+export default defineEventHandler (async (event) => {
     try {
         const { 
             title,
@@ -16,9 +27,9 @@ export default defineEventHandler (async event => {
             address,
             contacts,
             images
-        } = await readBody(event) as UserRequestBodyType
+        } = await readValidatedBody(event, requestBodySchema.parse)
 
-        const result = await db.transaction(async (tx) => {
+        const result = await db.transaction(async () => {
             const insertUser = await addUser( insertUserSchema.parse({ title, firstName, lastName, dob, roleTypeId }))
             
             if (!insertUser[0].userId) throw Error( "User could not be created")
@@ -26,23 +37,24 @@ export default defineEventHandler (async event => {
             const newUserId = { userId: insertUser[0].userId}
             const promises = []
             if (address) {
-                let userLocations = address.map(add => insertLocationSchema.parse({ ...add, ...insertUser}))
+                const userLocations = address.map(add => insertLocationSchema.parse({ ...add, ...insertUser}))
                 promises.push(addLocations(userLocations))
             }
             if (contacts) {
-                let userContacts = contacts.map(contact => (insertUserContactSchema.parse({ ...contact, ...newUserId})))
+                const userContacts = contacts.map(contact => (insertUserContactSchema.parse({ ...contact, ...newUserId})))
                 promises.push(addContacts(userContacts))
             }            
             
             if (images) {            
                 const parsedImages = images.map((url: string) => (insertUserImageSchema.parse({imageUrl: url, ...newUserId})))
+
                 promises.push(addUserImages(parsedImages))
             }
     
             if (promises.length > 0) {
-                const allPromises = await Promise.allSettled(promises)
+                await Promise.allSettled(promises)
                     .then(results => results)
-                    .catch((error: any) => new Error(error.message))
+                    .catch((error) => new Error(error.message))
             }
     
             return await getUser(newUserId.userId)
@@ -50,10 +62,14 @@ export default defineEventHandler (async event => {
         
         return new Response(JSON.stringify(result))
 
-    } catch (error: any) {
-        throw createError({
-            statusCode: 400,
-            message: error.message
-        })
+    } catch (error) {
+        if (error instanceof Error) {
+            throw createError({
+                statusCode: 400,
+                message: error.message
+            })
+        } else {
+            console.error('Caught an unknown Error: ', error)
+        }
     }
 })

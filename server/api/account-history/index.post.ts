@@ -1,32 +1,41 @@
-import { addAcountsOverviewReportRows } from "~/db/supabase/queries/accountsQuery"
-import { InsertAccountsOverviewReport } from "~/db/supabase/schema"
-import { db } from "~/server/db-services"
+import { addAcountsOverviewReportRows } from '~~/server/supabase/queries/accountsQuery'
+import { insertAccountsOverviewSchema } from '#shared/types'
+import type { InsertAccountsOverviewSchema }  from '#shared/types'
+import { db } from '@@/server/db-services'
+import { z } from 'zod/v4'
 
-type InsertAccountsOverViewReportType = {
-    userId: number
-    monthlyAnalysis: InsertAccountsMonthlyAnalysisType[]
-}
-type InsertAccountsMonthlyAnalysisType = {
-    month: number
-    year: number
-    balances: InsertAccountsBalanceType[]
-}
 
-type InsertAccountsBalanceType = {
-    issueType: string
-    totalBalance: number
-}
+const userSchema = z.object({
+    userId: z.number().min(1)
+})
+const balanceSchema = z.object({
+    issueType: z.literal(['Balance', 'Debt', 'Credit']),
+    totalBalance: z.number()
+})
+const monthYearSchema = z.object({
+    month: z.number(),
+    year: z.number()
+})
+
+const analysisSchema = monthYearSchema.extend({
+    balances: z.array(balanceSchema)
+})
+
+const monthlyAnalysisSchema = userSchema.extend({
+    monthlyAnalysis: z.array(analysisSchema)
+})
+
+const prepDataSchema = z.array(insertAccountsOverviewSchema)
 
 export default defineEventHandler(async (event) => {
-    const { userId, monthlyAnalysis }: InsertAccountsOverViewReportType = await readBody(event) 
-    const prepData = monthlyAnalysis.reduce((acc: InsertAccountsOverviewReport[], { month, year, balances }: InsertAccountsMonthlyAnalysisType): InsertAccountsOverviewReport[] => {
+    const { userId, monthlyAnalysis } = await readValidatedBody(event, monthlyAnalysisSchema.parse)
 
-        const balanceObj: InsertAccountsOverviewReport[] = balances.map(({ issueType, totalBalance}: InsertAccountsBalanceType) => ({userId: userId, month, year, issueType, totalBalance}))
-        if (balanceObj.length > 0) balanceObj.forEach(bal => acc.push(bal))
-        return acc;
+    const prepData = monthlyAnalysis.reduce((acc: InsertAccountsOverviewSchema[], { month, year, balances }) => {
+        const balanceObj = balances.map(({ issueType, totalBalance}) => ({userId, month, year, issueType, totalBalance}))
+        if ( balanceObj.length > 0) balanceObj.forEach(bal => acc.push(bal))
+            return acc;
     }, [])
-
-    const results = await db.transaction(async (t) => await addAcountsOverviewReportRows(prepData))
-
-    return results
+    
+    const data = prepDataSchema.parse(prepData)
+    return await db.transaction(async () => await addAcountsOverviewReportRows(data))    
 })

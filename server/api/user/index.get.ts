@@ -1,7 +1,7 @@
-import { getUser } from "~/db/supabase/queries/userQuery"
-import userData from "~/utils/user-data"
+import { getUser } from "~~/server/supabase/queries/userQuery"
+// import userData from "@/utils/user-data"
 
-export default defineEventHandler(async (event) => await getUser(1))
+export default defineEventHandler(async () => await getUser(1))
 // export default defineEventHandler(async (event) => {
 //     const user = await getUser(1)
 //     return new Promise((resolve) => {

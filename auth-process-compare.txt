@@ -1,0 +1,48 @@
+
+
+
+
+<!-- 
+
+
+Step for Nuxt-Auth-Utils
+
+1. Go through the installation process
+2. Setup Nuxt Config
+3. Setup .env variables
+4. Setup Drizzle-orm, DB setup and schema
+5. Create pages > Login, Register, and Protected and non-protected pages
+6. Create Auth Middleware
+7. Create Register/Login API to handle insert/select from db
+8. Create UI and call Register/Login APIs to handle authentication, furthermore, validate with zod
+
+9. Registration process:
+    - useToast for displaying notifications
+    - on Register Func: 
+        - trycatch error
+        - call api route with post method
+        - if all ok, navigate to protected page/default protected page
+    - on register API:
+        - parse requestBody with zod
+        - hash password
+        - insert user data to db
+        - setUserSession: takes event and an object containing: user: {id, ...}, lastLoggedIn
+            - decalre module '#auth-utils' with interfaces in auth.d.ts file
+        - navigate to required page when success
+
+10. For protected pages - use definePageMeta({ middleware: ['auth']})
+
+
+Setup for Supabase auth
+
+1. Create Supabase project
+2. Install @nuxtjs/supabase --save-dev
+3. Add modules to nuxt config "@nuxtjs/supabase"
+4. Create .env variables: SUPABASE_URL, SUPABASE_KEY
+5. Register a new user with client (useSupabaseAuthClient())
+6. Login Verify user auth with client (useSupabaseAuthClient())
+7. Access user with useSupabaseUser()
+8. Create Middleware as auth.ts
+9. define page meta for protected pages
+
+ -->

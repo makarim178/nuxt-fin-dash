@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
-import * as schema from '~/db/supabase/schema'
+import * as schema from '#shared/types'
 
 const config = useRuntimeConfig()
 const client = postgres(config.public.dbUrl, { prepare: false })
