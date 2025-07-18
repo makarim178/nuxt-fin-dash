@@ -13,7 +13,6 @@ export default defineEventHandler(async () => {
       rolesCount: rolesArr.length
     })
   } catch (error) {
-    console.log(error)
     if (error instanceof Error) {
             throw createError({
                 statusCode: 400,
