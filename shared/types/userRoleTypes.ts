@@ -3,7 +3,7 @@ import { creationFields } from "./commonFields";
 import { relations } from "drizzle-orm";
 import { user } from "./user";
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
-import type { z } from "zod/v4";
+import { z } from "zod/v4";
 
 export const userRoleTypes = pgTable('userRoleTypes', {
     id: serial('id').notNull().primaryKey(),
@@ -17,6 +17,13 @@ export const roleTypesRelations = relations(userRoleTypes, ({ one }) => ({
         references: [user.roleTypeId]
     })
 }))
+
+export const rolesSelectResponseSchema = z.object({
+    roles: z.array(z.string()),
+    rolesCount: z.number()
+})
+
+export type RolesSelectResponseSchema = z.output<typeof rolesSelectResponseSchema>
 
 export const userRoleSchema = createSelectSchema(userRoleTypes)
 export type UserRoleSchema = z.infer<typeof userRoleSchema>
