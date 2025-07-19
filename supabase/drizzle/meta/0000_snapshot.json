@@ -1,5 +1,5 @@
 {
-  "id": "f09cfc71-a7b9-4717-ab82-e08c382490fa",
+  "id": "91fe700a-632a-4281-afb6-2e2a9face22e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -16,7 +16,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -107,10 +107,10 @@
         }
       },
       "foreignKeys": {
-        "accountOverviewReport_user_id_users_id_fk": {
-          "name": "accountOverviewReport_user_id_users_id_fk",
+        "accountOverviewReport_user_id_user_id_fk": {
+          "name": "accountOverviewReport_user_id_user_id_fk",
           "tableFrom": "accountOverviewReport",
-          "tableTo": "users",
+          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
@@ -118,7 +118,7 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -139,7 +139,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -200,10 +200,10 @@
         }
       },
       "foreignKeys": {
-        "accountsHolder_user_id_users_id_fk": {
-          "name": "accountsHolder_user_id_users_id_fk",
+        "accountsHolder_user_id_user_id_fk": {
+          "name": "accountsHolder_user_id_user_id_fk",
           "tableFrom": "accountsHolder",
-          "tableTo": "users",
+          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
@@ -211,7 +211,7 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "no action"
         },
         "accountsHolder_accounts_type_id_accountsType_id_fk": {
           "name": "accountsHolder_accounts_type_id_accountsType_id_fk",
@@ -224,7 +224,7 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -284,7 +284,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -444,10 +444,10 @@
         }
       },
       "foreignKeys": {
-        "locations_user_id_users_id_fk": {
-          "name": "locations_user_id_users_id_fk",
+        "locations_user_id_user_id_fk": {
+          "name": "locations_user_id_user_id_fk",
           "tableFrom": "locations",
-          "tableTo": "users",
+          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
@@ -455,7 +455,7 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -476,7 +476,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -564,10 +564,10 @@
         }
       },
       "foreignKeys": {
-        "payeeAccountsHolders_user_id_users_id_fk": {
-          "name": "payeeAccountsHolders_user_id_users_id_fk",
+        "payeeAccountsHolders_user_id_user_id_fk": {
+          "name": "payeeAccountsHolders_user_id_user_id_fk",
           "tableFrom": "payeeAccountsHolders",
-          "tableTo": "users",
+          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
@@ -575,7 +575,7 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -594,9 +594,9 @@
           "primaryKey": true,
           "notNull": true
         },
-        "user_account_id": {
-          "name": "user_account_id",
-          "type": "integer",
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
@@ -636,18 +636,18 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "transactionHistory_user_account_id_users_id_fk": {
-          "name": "transactionHistory_user_account_id_users_id_fk",
+        "transactionHistory_user_id_user_id_fk": {
+          "name": "transactionHistory_user_id_user_id_fk",
           "tableFrom": "transactionHistory",
-          "tableTo": "users",
+          "tableTo": "user",
           "columnsFrom": [
-            "user_account_id"
+            "user_id"
           ],
           "columnsTo": [
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "no action"
         },
         "transactionHistory_payee_account_id_payeeAccountsHolders_id_fk": {
           "name": "transactionHistory_payee_account_id_payeeAccountsHolders_id_fk",
@@ -660,7 +660,7 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -681,7 +681,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -763,10 +763,10 @@
         }
       },
       "foreignKeys": {
-        "userContacts_user_id_users_id_fk": {
-          "name": "userContacts_user_id_users_id_fk",
+        "userContacts_user_id_user_id_fk": {
+          "name": "userContacts_user_id_user_id_fk",
           "tableFrom": "userContacts",
-          "tableTo": "users",
+          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
@@ -774,7 +774,7 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -803,7 +803,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -830,10 +830,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "userImages_user_id_users_id_fk": {
-          "name": "userImages_user_id_users_id_fk",
+        "userImages_user_id_user_id_fk": {
+          "name": "userImages_user_id_user_id_fk",
           "tableFrom": "userImages",
-          "tableTo": "users",
+          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
@@ -841,7 +841,7 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -860,8 +860,8 @@
           "primaryKey": true,
           "notNull": true
         },
-        "type": {
-          "name": "type",
+        "role": {
+          "name": "role",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
@@ -885,11 +885,11 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "userRoleTypes_type_unique": {
-          "name": "userRoleTypes_type_unique",
+        "userRoleTypes_role_unique": {
+          "name": "userRoleTypes_role_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "type"
+            "role"
           ]
         }
       },
@@ -897,13 +897,13 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.users": {
-      "name": "users",
+    "public.user": {
+      "name": "user",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true
         },
@@ -922,12 +922,6 @@
         "last_name": {
           "name": "last_name",
           "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "dob": {
-          "name": "dob",
-          "type": "varchar(10)",
           "primaryKey": false,
           "notNull": false
         },
@@ -985,9 +979,9 @@
         }
       },
       "foreignKeys": {
-        "users_roleTypeId_userRoleTypes_id_fk": {
-          "name": "users_roleTypeId_userRoleTypes_id_fk",
-          "tableFrom": "users",
+        "user_roleTypeId_userRoleTypes_id_fk": {
+          "name": "user_roleTypeId_userRoleTypes_id_fk",
+          "tableFrom": "user",
           "tableTo": "userRoleTypes",
           "columnsFrom": [
             "roleTypeId"
@@ -996,11 +990,19 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "user_id_unique": {
+          "name": "user_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

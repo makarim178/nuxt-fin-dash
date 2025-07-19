@@ -9,8 +9,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
 export const user = pgTable('user', {
-    id: serial('id').notNull().primaryKey(),
-    uuid: uuid().notNull().unique(),
+    id: uuid().notNull().unique().primaryKey(),
     title: varchar('title', { length: 5 }),
     firstName: varchar('first_name', { length: 255 }),
     lastName: varchar('last_name', { length: 255 }),
@@ -63,6 +62,7 @@ export const userAuthRegisterSchema = userAuthLoginSchema.extend({
     firstName: z.string().min(1).optional(),
     lastName: z.string().min(1).optional(),
     email: z.email('Invalid e-mail'),
+    role: z.number().min(1),
     confirmPassword: z.string().optional()
 }).refine(data => data.password === data.confirmPassword, {
     message: 'Passwords do not match',

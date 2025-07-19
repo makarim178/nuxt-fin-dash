@@ -1,4 +1,4 @@
-import { pgTable, serial, varchar, integer, index, uniqueIndex } from "drizzle-orm/pg-core";
+import { pgTable, serial, varchar, integer, index, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { cascadeOptions, creationFields, validityFields } from "./commonFields";
 import { user } from "./user";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
@@ -6,7 +6,7 @@ import type { z } from "zod/v4";
 
 export const payeeAccountsHolders = pgTable('payeeAccountsHolders', {
     id: serial('id').notNull().primaryKey(),
-    userId: integer('user_id').notNull().references(() => user.id, cascadeOptions),
+    userId: uuid('user_id').notNull().references(() => user.id, cascadeOptions),
     methodType: varchar('method_type').notNull(),
     payeeName: varchar('payee_name', { length: 255 }),
     interactMethod: varchar('interact_method', { length: 10}),

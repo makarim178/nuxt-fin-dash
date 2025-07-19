@@ -1,4 +1,4 @@
-import { index, integer, pgTable, real, serial, varchar } from 'drizzle-orm/pg-core';
+import { index, integer, pgTable, real, serial, uuid, varchar } from 'drizzle-orm/pg-core';
 import { cascadeOptions, creationFields } from './commonFields';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod/v4';
@@ -6,7 +6,7 @@ import { user } from './user';
 
 export const accountsOverviewReport = pgTable('accountOverviewReport', {
     id: serial('id').notNull().primaryKey(),
-    userId: integer('user_id').notNull().references(() => user.id, cascadeOptions),
+    userId: uuid('user_id').notNull().references(() => user.id, cascadeOptions),
     month: integer('month'),
     year: integer('year'),
     issueType: varchar('issue_type', { length: 20 }),

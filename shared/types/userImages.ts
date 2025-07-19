@@ -1,4 +1,4 @@
-import { pgTable, serial, integer, varchar } from "drizzle-orm/pg-core";
+import { pgTable, serial, integer, varchar, uuid } from "drizzle-orm/pg-core";
 import { user } from "./user";
 import { cascadeOptions, creationFields } from "./commonFields";
 import { relations } from "drizzle-orm";
@@ -7,7 +7,7 @@ import type { z } from "zod/v4";
 
 export const userImages = pgTable('userImages', {
     id: serial('id').notNull().primaryKey(),
-    userId: integer('user_id').notNull().references(() => user.id, cascadeOptions),
+    userId: uuid('user_id').notNull().references(() => user.id, cascadeOptions),
     imageUrl: varchar('image_url', { length: 255 }),
     ...creationFields
 })

@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1752141283668,
-      "tag": "0000_grey_hiroim",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1752220943537,
-      "tag": "0001_freezing_whistler",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1752823096723,
-      "tag": "0002_breezy_corsair",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1752830282912,
-      "tag": "0003_damp_the_renegades",
+      "when": 1752906847952,
+      "tag": "0000_fluffy_power_pack",
       "breakpoints": true
     }
   ]

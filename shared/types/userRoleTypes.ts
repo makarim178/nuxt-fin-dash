@@ -7,7 +7,7 @@ import { z } from "zod/v4";
 
 export const userRoleTypes = pgTable('userRoleTypes', {
     id: serial('id').notNull().primaryKey(),
-    type: varchar('type', { length: 100 }).notNull().unique(),
+    role: varchar('role', { length: 100 }).notNull().unique(),
     ...creationFields
 })
 
@@ -18,15 +18,15 @@ export const roleTypesRelations = relations(userRoleTypes, ({ one }) => ({
     })
 }))
 
-export const rolesSelectResponseSchema = z.object({
-    roles: z.array(z.string()),
-    rolesCount: z.number()
-})
 
 export type RolesSelectResponseSchema = z.output<typeof rolesSelectResponseSchema>
 
 export const userRoleSchema = createSelectSchema(userRoleTypes)
 export type UserRoleSchema = z.infer<typeof userRoleSchema>
 
+export const rolesSelectResponseSchema = z.object({
+    roles: z.array(userRoleSchema.pick({ id: true, role: true})),
+    rolesCount: z.number()
+})
 export const insertUserRoleSchema = createInsertSchema(userRoleTypes)
 export type InsertUserRoleSchema = z.infer<typeof insertUserRoleSchema>

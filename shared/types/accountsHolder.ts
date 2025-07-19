@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, uniqueIndex, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, uniqueIndex, uuid, varchar } from "drizzle-orm/pg-core";
 import { user } from "./user";
 import { accountsType, accountsTypeSchema } from "./accountsType";
 import { cascadeOptions, creationFields } from "./commonFields";
@@ -8,7 +8,7 @@ import type { z } from "zod/v4";
 
 export const accountsHolder = pgTable('accountsHolder', {
     id: serial('id').notNull().primaryKey(),
-    userId: integer('user_id').notNull().references(() => user.id, cascadeOptions),
+    userId: uuid('user_id').notNull().references(() => user.id, cascadeOptions),
     accountsTypeId: integer('accounts_type_id').notNull().references(() => accountsType.id, cascadeOptions),
     accountNumber: varchar('account_number', { length: 600 }),
     cvv: varchar('cvv', { length: 5 }),

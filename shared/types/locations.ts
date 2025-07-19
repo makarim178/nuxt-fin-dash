@@ -1,4 +1,4 @@
-import { pgTable, serial, integer, varchar, index } from "drizzle-orm/pg-core";
+import { pgTable, serial, integer, varchar, index, uuid } from "drizzle-orm/pg-core";
 import { user } from "./user";
 import { cascadeOptions, creationFields, validityFields } from "./commonFields";
 import { relations } from "drizzle-orm";
@@ -7,7 +7,7 @@ import type { z } from "zod/v4";
 
 export const locations = pgTable('locations', {
     id: serial('id').notNull().primaryKey(),
-    userId: integer('user_id').notNull().references(() => user.id, cascadeOptions),
+    userId: uuid('user_id').notNull().references(() => user.id, cascadeOptions),
     streetNumber: varchar('street_number', { length: 6 }).notNull(),
     streetName: varchar('street_name', { length: 500 }).notNull(),
     postcode: varchar('postcode', { length: 6}).notNull(),
