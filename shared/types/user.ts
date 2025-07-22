@@ -70,12 +70,30 @@ export const userAuthRegisterSchema = userAuthLoginSchema.extend({
 })
 
 export type TitleSchema = z.infer<typeof titleSchema>
+export const userRequestBodySchema = insertUserSchema.extend({
+    id: z.uuid(),
+    address: z.array(insertLocationSchema.omit({ userId: true})).optional(),
+    contacts: z.array(insertUserContactSchema.omit({ userId: true })).optional(),
+    images: z.array(z.string()).optional()
+})
+
+export const userRegisterBodySchema = insertUserSchema.omit({ id: true }).extend({
+    email: z.string(),
+    password: z.string(),
+    images: z.array(z.string()).optional()
+})
 export type UserSchema = z.infer<typeof userSchema>
 export type InsertUserSchema = z.infer<typeof insertUserSchema>
 export type UserWithRelationSchema = z.infer<typeof userWithRelations>
 
+
+export type UserRequestBodySchema = z.infer<typeof userRequestBodySchema>
+export type UserRegisterBodySchema = z.infer<typeof userRegisterBodySchema>
+
+
 export type UserAuthLoginSchema = z.output<typeof userAuthLoginSchema>
 export type UserAuthRegisterSchema = z.output<typeof userAuthRegisterSchema>
+export type UserRegPayloadSchema = Pick<UserAuthRegisterSchema, 'title' | 'firstName' | 'lastName' | 'email' | 'role'>
 // export type User = InferSelectModel<typeof user>
 // export type InsertUser = InferInsertModel<typeof user>
 

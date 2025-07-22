@@ -2,7 +2,6 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 import { userAuthRegisterSchema } from '../../shared/types';
 import type { TitleSchema, UserAuthRegisterSchema } from '../../shared/types';
-import { z } from 'zod/v4';
 
 const titleRef = ref<TitleSchema[]>(['Mr.', 'Ms.', 'Mrs.'])
 
@@ -16,89 +15,33 @@ const state = reactive<Partial<UserAuthRegisterSchema>>({
   confirmPassword: ''
 })
 
+const showRef = ref<{ [key: string]: boolean }>({
+  pass: false,
+  confirmPass: false
+})
+
 const toast = useToast()
 const client = useSupabaseClient()
 
 const { data, pending } = useFetch('/api/role-setup', { key: 'user-roles'})
-const itemValue = ref(1)
-// const items = ref([
-//   {
-//     label: 'Backlog',
-//     id: 'backlog'
-//   },
-//   {
-//     label: 'Todo',
-//     id: 'todo'
-//   },
-//   {
-//     label: 'In Progress',
-//     id: 'in_progress'
-//   },
-//   {
-//     label: 'Done',
-//     id: 'done'
-//   }
-// ])
-
-// {
-//     "user": {
-//         "id": "3d24d3ab-dc03-4bef-bb0d-d469bf13be61",
-//         "aud": "authenticated",
-//         "role": "authenticated",
-//         "email": "makarim178@gmail.com",
-//         "phone": "",
-//         "confirmation_sent_at": "2025-07-19T06:08:21.381738075Z",
-//         "app_metadata": {
-//             "provider": "email",
-//             "providers": [
-//                 "email"
-//             ]
-//         },
-//         "user_metadata": {
-//             "email": "makarim178@gmail.com",
-//             "email_verified": false,
-//             "phone_verified": false,
-//             "sub": "3d24d3ab-dc03-4bef-bb0d-d469bf13be61"
-//         },
-//         "identities": [
-//             {
-//                 "identity_id": "74993f98-ad56-4979-b03d-48c9f38cb395",
-//                 "id": "3d24d3ab-dc03-4bef-bb0d-d469bf13be61",
-//                 "user_id": "3d24d3ab-dc03-4bef-bb0d-d469bf13be61",
-//                 "identity_data": {
-//                     "email": "makarim178@gmail.com",
-//                     "email_verified": false,
-//                     "phone_verified": false,
-//                     "sub": "3d24d3ab-dc03-4bef-bb0d-d469bf13be61"
-//                 },
-//                 "provider": "email",
-//                 "last_sign_in_at": "2025-07-19T06:08:21.361223685Z",
-//                 "created_at": "2025-07-19T06:08:21.361281Z",
-//                 "updated_at": "2025-07-19T06:08:21.361281Z",
-//                 "email": "makarim178@gmail.com"
-//             }
-//         ],
-//         "created_at": "2025-07-19T06:08:21.337323Z",
-//         "updated_at": "2025-07-19T06:08:21.82178Z",
-//         "is_anonymous": false
-//     },
-//     "session": null
-// }
 
 const onSubmit = async (event: FormSubmitEvent<UserAuthRegisterSchema>) => {
   try {
-    const { data, error } = await client.auth.signUp({      
-      email: event.data.email, 
-      password: event.data.password      
+    const response = await $fetch('/api/user', {
+      method: 'POST',
+      body: {
+        title: state.title,
+        firstName: state.firstName,
+        lastName: state.lastName,
+        roleTypeId: state.role,
+        email: state.email,
+        password: state.password
+      }
     })
-    if (error) throw error
-    const uuidType = z.uuidv4()
-    const uuid = uuidType.parse(data?.user?.id)
-    if (uuid) {
-
-    }
-
+    if (!response) throw new Error('Error registering user, please try again!')
     toast.add({ title: 'Success', description: 'Please check your email and confirm registration!', color: 'success' })
+
+    await navigateTo('/login')
   } catch (error) {
     const description = handleToastErrorMsg(error)
     toast.add({
@@ -107,6 +50,10 @@ const onSubmit = async (event: FormSubmitEvent<UserAuthRegisterSchema>) => {
       description
     })
   }
+}
+
+const showClickHandler = (key:string) => {
+  showRef.value[key] = !showRef.value[key]
 }
 </script>
 
@@ -155,23 +102,33 @@ const onSubmit = async (event: FormSubmitEvent<UserAuthRegisterSchema>) => {
         name="password">
         <UInput 
           v-model="state.password" 
-          type="password" 
-          class="w-full"/>
+          :type="showRef.pass ? 'text' : 'password'" 
+          class="w-full"
+          :ui="{ trailing: 'pe-1'}">
+          <template #trailing>
+            <PasswordButton :show="showRef.pass" source="password" key-value="pass" @on-show-click-emit="showClickHandler" />
+          </template>
+        </UInput>
       </UFormField>
       <UFormField 
         label="Confirm Password" 
         name="confirmPassword">
         <UInput 
           v-model="state.confirmPassword" 
-          type="password" 
-          class="w-full"/>
+          :type="showRef.confirmPass ? 'text' : 'password'" 
+          class="w-full"
+          :ui="{ trailing: 'pe-1'}">
+          <template #trailing>
+            <PasswordButton :show="showRef.confirmPass" source="confirmPassword" key-value="confirmPass" @on-show-click-emit="showClickHandler" />
+          </template>
+        </UInput>
       </UFormField>
       <div class="flex justify-end">
-        <UButton type="submit" size="xl">Register</UButton>
+        <UButton type="submit" size="xl" class="cursor-pointer">Register</UButton>
       </div>
     </UForm>
     <template #footer>
-      <h4>Please <NuxtLink to="/login" class="text-blue-300 hover:text-blue-600">login</NuxtLink> if you are an existing user.</h4>
+      <h4>Please <NuxtLink to="/login" class="text-success hover:text-success-500 cursor-pointer">login</NuxtLink> if you are an existing user.</h4>
     </template>
   </UCard>
 </template>

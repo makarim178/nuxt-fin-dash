@@ -33,3 +33,4 @@ export const insertUserContactSchema = createInsertSchema(userContacts, {
 
 export type UserContactSchema = z.infer<typeof userContactSchema>
 export type InsertUserContactSchema = z.infer<typeof insertUserContactSchema> 
+export type UserContactDataSchema = Pick<UserContactSchema, 'contactType' | 'contact' | 'countryCode' | 'isValid' | 'isPrimary'> 

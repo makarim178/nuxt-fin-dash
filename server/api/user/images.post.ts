@@ -8,8 +8,19 @@ const requestBodySchema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-    const { userId, images } = await readValidatedBody(event, requestBodySchema.parse)
-    const imagesObj = images.map((url: string) => ( insertUserImageSchema.parse({ userId, imageUrl: url})))
-    const addImages = await addUserImages(imagesObj)
-    return new Response( JSON.stringify(addImages))
+    try {
+        const { userId, images } = await readValidatedBody(event, requestBodySchema.parse)
+        const imagesObj = images.map((url: string) => ( insertUserImageSchema.parse({ userId, imageUrl: url})))
+        const addImages = await addUserImages(imagesObj)
+        return new Response(JSON.stringify(addImages))        
+    } catch (error) {
+        if (error instanceof Error) {
+            throw createError({
+                statusCode: 400,
+                message: error.message
+            })
+        } else {
+            console.error('Caught an unknown Error: ', error)
+        }
+    }
 })

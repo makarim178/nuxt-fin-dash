@@ -1,7 +1,27 @@
+import { z } from "zod/v4"
 import { getUser } from "~~/server/supabase/queries/userQuery"
 // import userData from "@/utils/user-data"
 
-export default defineEventHandler(async () => await getUser(1))
+const requestBodySchema = z.object({
+    userId: z.string()
+})
+
+export default defineEventHandler(async (event) => {
+    try {
+        const { userId } = await getValidatedQuery(event, requestBodySchema.parse)
+        console.log(userId)
+        return await getUser(userId)       
+    } catch (error) {
+        if (error instanceof Error) {
+            throw createError({
+                statusCode: 400,
+                message: error.message
+            })
+        } else {
+            console.error('Caught an unknown Error: ', error)
+        }
+    }
+})
 // export default defineEventHandler(async (event) => {
 //     const user = await getUser(1)
 //     return new Promise((resolve) => {

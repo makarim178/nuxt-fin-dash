@@ -19,9 +19,6 @@ export const imageRelations = relations(userImages, ({ one }) => ({
     })
 }))
 
-// export type UserImages = InferSelectModel<typeof userImages>
-// export type InsertUserImages = InferInsertModel<typeof userImages>
-
 export const userImageSchema = createSelectSchema(userImages)
 export const insertUserImageSchema = createInsertSchema(userImages, {
     userId: (schema) => schema.min(1)

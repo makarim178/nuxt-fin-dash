@@ -100,6 +100,8 @@ const getTitle = () => {
     return success ? item.name : ''
 }
 
+
+// Requires userId
 const { data: user, pending }  = useLazyFetch('/api/user', {
     key: 'user-for-header',
     transform: (user: UserWithRelationSchema) => {

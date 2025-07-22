@@ -3,63 +3,75 @@ import { addLocations } from "~~/server/supabase/queries/locationsQuery"
 import { addUserImages } from "~~/server/supabase/queries/userImageQuery"
 import { addUser, getUser } from "~~/server/supabase/queries/userQuery"
 import { 
-    insertLocationSchema, 
-    insertUserContactSchema, 
     insertUserImageSchema, 
-    insertUserSchema } from "#shared/types"
+    insertUserSchema, 
+    userRegisterBodySchema } from "#shared/types"
 import { db } from "~~/server/db-services"
-import { z } from "zod/v4"
-
-const requestBodySchema = insertUserSchema.extend({
-    address: z.array(insertLocationSchema),
-    contacts: z.array(insertUserContactSchema),
-    images: z.array(z.string())
-})
+import { getRandomUserImage } from "~~/server/utils/user-utils"
+import { serverSupabaseClient } from '#supabase/server'
+import { removeUser } from "~~/server/services/user-utils"
+import { uuid } from "drizzle-orm/gel-core"
 
 export default defineEventHandler (async (event) => {
     try {
         const { 
+            password,
+            email,
             title,
             firstName,
             lastName,
-            dob,
             roleTypeId,
-            address,
-            contacts,
             images
-        } = await readValidatedBody(event, requestBodySchema.parse)
+        } = await readValidatedBody(event, userRegisterBodySchema.parse)
 
-        const result = await db.transaction(async () => {
-            const insertUser = await addUser( insertUserSchema.parse({ title, firstName, lastName, dob, roleTypeId }))
+        const client = await serverSupabaseClient(event)
             
-            if (!insertUser[0].userId) throw Error( "User could not be created")
-                
-            const newUserId = { userId: insertUser[0].userId}
-            const promises = []
-            if (address) {
-                const userLocations = address.map(add => insertLocationSchema.parse({ ...add, ...insertUser}))
-                promises.push(addLocations(userLocations))
-            }
-            if (contacts) {
-                const userContacts = contacts.map(contact => (insertUserContactSchema.parse({ ...contact, ...newUserId})))
-                promises.push(addContacts(userContacts))
-            }            
-            
-            if (images) {            
-                const parsedImages = images.map((url: string) => (insertUserImageSchema.parse({imageUrl: url, ...newUserId})))
-
-                promises.push(addUserImages(parsedImages))
-            }
-    
-            if (promises.length > 0) {
-                await Promise.allSettled(promises)
-                    .then(results => results)
-                    .catch((error) => new Error(error.message))
-            }
-    
-            return await getUser(newUserId.userId)
+        const { data, error } = await client.auth.signUp({
+            email: email,
+            password: password
         })
+
+        if (error) throw error
+
+        const uuid = data?.user?.id
+
+        if (!uuid) throw new Error('User Id not generated') 
+            
+            const result = await db.transaction(async () => {
+                const newUserId = { userId: uuid}
+                await addUser( insertUserSchema.parse({ id: uuid, title, firstName, lastName, roleTypeId }))
+                const promises = []                   
+                promises.push(addContacts([{
+                    userId: uuid,
+                    contactType: 'email',
+                    countryCode: null,
+                    contact: email,
+                    isValid: true,
+                    isPrimary: true
+                }]))
+                
+                let parsedImages = []
+                if (images) {            
+                    parsedImages = images.map((url: string) => (insertUserImageSchema.parse({imageUrl: url, ...newUserId})))
+                } else {
+                    parsedImages = [{
+                        userId: uuid,
+                        imageUrl: getRandomUserImage(title ?? 'Mr.')
+                    }]
+                }
+                promises.push(addUserImages(parsedImages))
         
+                if (promises.length > 0) {
+                    await Promise.allSettled(promises)
+                        .then(results => results)
+                        .catch((error) => new Error(error.message))
+                }
+        
+                return await getUser(uuid)
+            })
+
+        if (!result) await removeUser(event, uuid)
+
         return new Response(JSON.stringify(result))
 
     } catch (error) {
