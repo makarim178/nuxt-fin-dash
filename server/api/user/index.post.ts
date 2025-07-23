@@ -1,5 +1,4 @@
 import { addContacts } from "~~/server/supabase/queries/contactsQuery"
-import { addLocations } from "~~/server/supabase/queries/locationsQuery"
 import { addUserImages } from "~~/server/supabase/queries/userImageQuery"
 import { addUser, getUser } from "~~/server/supabase/queries/userQuery"
 import { 
@@ -10,7 +9,6 @@ import { db } from "~~/server/db-services"
 import { getRandomUserImage } from "~~/server/utils/user-utils"
 import { serverSupabaseClient } from '#supabase/server'
 import { removeUser } from "~~/server/services/user-utils"
-import { uuid } from "drizzle-orm/gel-core"
 
 export default defineEventHandler (async (event) => {
     try {
@@ -35,40 +33,40 @@ export default defineEventHandler (async (event) => {
 
         const uuid = data?.user?.id
 
-        if (!uuid) throw new Error('User Id not generated') 
+        if (!uuid) throw new Error('Could not generate User Id!') 
             
-            const result = await db.transaction(async () => {
-                const newUserId = { userId: uuid}
-                await addUser( insertUserSchema.parse({ id: uuid, title, firstName, lastName, roleTypeId }))
-                const promises = []                   
-                promises.push(addContacts([{
+        const result = await db.transaction(async () => {
+            const newUserId = { userId: uuid}
+            await addUser( insertUserSchema.parse({ id: uuid, title, firstName, lastName, roleTypeId }))
+            const promises = []
+            promises.push(addContacts([{
+                userId: uuid,
+                contactType: 'email',
+                countryCode: null,
+                contact: email,
+                isValid: true,
+                isPrimary: true
+            }]))
+            
+            let parsedImages = []
+            if (images) {            
+                parsedImages = images.map((url: string) => (insertUserImageSchema.parse({imageUrl: url, ...newUserId})))
+            } else {
+                parsedImages = [{
                     userId: uuid,
-                    contactType: 'email',
-                    countryCode: null,
-                    contact: email,
-                    isValid: true,
-                    isPrimary: true
-                }]))
-                
-                let parsedImages = []
-                if (images) {            
-                    parsedImages = images.map((url: string) => (insertUserImageSchema.parse({imageUrl: url, ...newUserId})))
-                } else {
-                    parsedImages = [{
-                        userId: uuid,
-                        imageUrl: getRandomUserImage(title ?? 'Mr.')
-                    }]
-                }
-                promises.push(addUserImages(parsedImages))
-        
-                if (promises.length > 0) {
-                    await Promise.allSettled(promises)
-                        .then(results => results)
-                        .catch((error) => new Error(error.message))
-                }
-        
-                return await getUser(uuid)
-            })
+                    imageUrl: getRandomUserImage(title ?? 'Mr.')
+                }]
+            }
+            promises.push(addUserImages(parsedImages))
+    
+            if (promises.length > 0) {
+                await Promise.allSettled(promises)
+                    .then(results => results)
+                    .catch((error) => new Error(error.message))
+            }
+    
+            return await getUser(uuid)
+        })
 
         if (!result) await removeUser(event, uuid)
 
