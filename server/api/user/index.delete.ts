@@ -1,5 +1,5 @@
 import { z } from "zod/v4"
-import { serverSupabaseServiceRole } from '#supabase/server'
+// import { serverSupabaseServiceRole } from '#supabase/server'
 import { removeUser } from "~~/server/services/user-utils"
 
 const requestBodySchema = z.object({

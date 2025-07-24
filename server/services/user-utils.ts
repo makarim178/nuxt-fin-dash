@@ -1,5 +1,5 @@
 import { serverSupabaseServiceRole } from '#supabase/server'
-import { H3Event, EventHandlerRequest } from 'h3'
+import type { H3Event, EventHandlerRequest } from 'h3'
 
 export const removeUser = async (event: H3Event<EventHandlerRequest>, uuid: string) => {
     try {
@@ -10,9 +10,10 @@ export const removeUser = async (event: H3Event<EventHandlerRequest>, uuid: stri
             message: 'User removed'
         }        
     } catch (error) {
+        console.error(error)
         return {
             success: false,
-            message: 'Could not remove user'
+            message: `Could not remove user`
         }
     }
 }

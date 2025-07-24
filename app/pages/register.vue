@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '@nuxt/ui';
 import { userAuthRegisterSchema } from '../../shared/types';
 import type { TitleSchema, UserAuthRegisterSchema } from '../../shared/types';
 
@@ -21,11 +20,10 @@ const showRef = ref<{ [key: string]: boolean }>({
 })
 
 const toast = useToast()
-const client = useSupabaseClient()
 
 const { data, pending } = useFetch('/api/role-setup', { key: 'user-roles'})
 
-const onSubmit = async (event: FormSubmitEvent<UserAuthRegisterSchema>) => {
+const onSubmit = async () => {
   try {
     const response = await $fetch('/api/user', {
       method: 'POST',
@@ -69,11 +67,13 @@ const showClickHandler = (key:string) => {
       @submit="onSubmit">
         <div class="flex w-full gap-2">
           <UFormField label="Title" name="title">
-            <USelect v-model="state.title" :items="titleRef" class="w-24" color="success" 
-            variant="outline" 
-            :ui="{
-              content: 'bg-slate-800/90'
-            }"/>
+            <USelect 
+              v-model="state.title" 
+              :items="titleRef"
+              class="w-24" 
+              color="success" 
+              variant="outline" 
+              :ui="{ content: 'bg-slate-900' }"/>
           </UFormField>
           <UFormField label="First Name" name="firstName" class="w-1/2">
             <UInput v-model="state.firstName" class="w-full"/>
@@ -86,14 +86,18 @@ const showClickHandler = (key:string) => {
           <UFormField label="Email" name="email" class="w-2/3">
             <UInput 
               v-model="state.email" 
-              class="w-full"/>
+              class="w-full" />
           </UFormField>
           <UFormField v-if="!pending" label="User Role" name="role" class="w-1/3">
-            <USelect v-model="state.role" value-key="id" :items="data.roles" class="w-full" color="success" label-key="role"
-            variant="outline" 
-            :ui="{
-              content: 'bg-slate-800/90'
-            }"/>
+            <USelect 
+              v-model="state.role" 
+              value-key="id"
+              :items="data.roles"
+              class="w-full"
+              color="success"
+              label-key="role"
+              variant="outline" 
+              :ui="{ content: 'bg-slate-800/90' }"/>
           </UFormField>
 
         </div>
@@ -106,7 +110,7 @@ const showClickHandler = (key:string) => {
           class="w-full"
           :ui="{ trailing: 'pe-1'}">
           <template #trailing>
-            <PasswordButton :show="showRef.pass" source="password" key-value="pass" @on-show-click-emit="showClickHandler" />
+            <PasswordButton :show="showRef.pass ?? false" @on-show-click-emit="showClickHandler" />
           </template>
         </UInput>
       </UFormField>
@@ -119,7 +123,7 @@ const showClickHandler = (key:string) => {
           class="w-full"
           :ui="{ trailing: 'pe-1'}">
           <template #trailing>
-            <PasswordButton :show="showRef.confirmPass" source="confirmPassword" key-value="confirmPass" @on-show-click-emit="showClickHandler" />
+            <PasswordButton :show="showRef.confirmPass ?? false" source="confirmPassword" key-value="confirmPass" @on-show-click-emit="showClickHandler" />
           </template>
         </UInput>
       </UFormField>

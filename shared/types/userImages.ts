@@ -1,4 +1,4 @@
-import { pgTable, serial, integer, varchar, uuid } from "drizzle-orm/pg-core";
+import { pgTable, serial, varchar, uuid } from "drizzle-orm/pg-core";
 import { user } from "./user";
 import { cascadeOptions, creationFields } from "./commonFields";
 import { relations } from "drizzle-orm";

@@ -6,7 +6,7 @@ import { z } from 'zod/v4'
 
 
 const userSchema = z.object({
-    userId: z.number().min(1)
+    userId: z.uuid()
 })
 const balanceSchema = z.object({
     issueType: z.literal(['Balance', 'Debt', 'Credit']),

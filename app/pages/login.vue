@@ -1,45 +1,12 @@
-<template>
-  <UCard variant="subtle" class="w-1/2">
-    <template #header>
-      <h4>User Registration</h4>
-    </template>
-    <UForm 
-      :schema="userAuthLoginSchema"
-      :state="state"
-      class="space-y-4 w-full"
-      @submit="onSubmit">
-      <UFormField 
-        label="Email" 
-        name="email">
-        <UInput 
-          v-model="state.email" 
-          class="w-full"/>
-      </UFormField>
-      <UFormField 
-        label="Password" 
-        name="password">
-        <UInput 
-          v-model="state.password" 
-          type="password" 
-          class="w-full"/>
-      </UFormField>
-      <UButton type="submit">Login</UButton>
-    </UForm>
-    <template #footer>
-      <h6 class="text-sm">Not a registered user? Please <NuxtLink to="/register" class="cursor-pointer opacity-50 hover:opacity-70">Register</NuxtLink>.</h6>
-    </template>
-  </UCard>
-</template>
-
 <script lang="ts" setup>
+import type { FormSubmitEvent } from '@nuxt/ui';
+import { userAuthLoginSchema } from '../../shared/types';
+import type { UserAuthLoginSchema } from '../../shared/types';
 definePageMeta({
   layout: 'default'
 })
-import type { FormSubmitEvent } from '@nuxt/ui';
-import { z } from 'zod/v4';
-import { userAuthLoginSchema } from '../../shared/types';
-import type { UserAuthLoginSchema } from '../../shared/types';
 
+const showRef = ref<boolean>(false)
 const client = useSupabaseClient()
 
 const state = reactive<Partial<UserAuthLoginSchema>>({
@@ -48,6 +15,10 @@ const state = reactive<Partial<UserAuthLoginSchema>>({
 })
 
 const toast = useToast()
+
+const showClickHandler = () => {
+  showRef.value = !showRef.value
+}
 
 async function onSubmit(event: FormSubmitEvent<UserAuthLoginSchema>) {
   try {
@@ -70,3 +41,43 @@ async function onSubmit(event: FormSubmitEvent<UserAuthLoginSchema>) {
 }
 
 </script>
+
+<template>
+  <UCard variant="subtle" class="w-1/2">
+    <template #header>
+      <h4>User Registration</h4>
+    </template>
+    <UForm 
+      :schema="userAuthLoginSchema"
+      :state="state"
+      class="space-y-4 w-full"
+      @submit="onSubmit">
+      <UFormField 
+        label="Email" 
+        name="email">
+        <UInput 
+          v-model="state.email" 
+          class="w-full"/>
+      </UFormField>
+      <UFormField 
+        label="Password" 
+        name="password">
+        <UInput 
+          v-model="state.password" 
+          :type="showRef ? 'text' : 'password'" 
+          class="w-full">
+          <template #trailing>
+            <PasswordButton :show="showRef" @on-show-click-emit="showClickHandler" />
+          </template>
+        </UInput>
+      </UFormField>
+      <UButton type="submit" class="cursor-pointer">Login</UButton>
+    </UForm>
+    <template #footer>
+      <h6 class="text-sm">Not a registered user? Please 
+        <NuxtLink 
+          to="/register" 
+          class="cursor-pointer text-success hover:text-success-500">Register</NuxtLink>.</h6>
+    </template>
+  </UCard>
+</template>

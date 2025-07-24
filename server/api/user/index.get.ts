@@ -1,16 +1,19 @@
-import { z } from "zod/v4"
+import { serverSupabaseUser } from '#supabase/server'
 import { getUser } from "~~/server/supabase/queries/userQuery"
+// import { z } from "zod/v4"
 // import userData from "@/utils/user-data"
 
-const requestBodySchema = z.object({
-    userId: z.string()
-})
+// const requestBodySchema = z.object({
+//     userId: z.string()
+// })
 
 export default defineEventHandler(async (event) => {
     try {
-        const { userId } = await getValidatedQuery(event, requestBodySchema.parse)
-        console.log(userId)
-        return await getUser(userId)       
+        const user = await serverSupabaseUser(event)
+        // const { userId } = await getValidatedQuery(event, requestBodySchema.parse)
+        // console.log(userId)
+        if (!user?.id) throw new Error('User Id is not defined!')
+        return await getUser(user?.id)       
     } catch (error) {
         if (error instanceof Error) {
             throw createError({

@@ -1,10 +1,20 @@
 <script lang="ts" setup>
-const props = defineProps(['show', 'source', 'keyValue'])
+interface Props {
+    show?: boolean, 
+    source?: string,
+    keyValue?: string
+}
+// const props = defineProps(['show', 'source', 'keyValue'])
+const props = withDefaults(defineProps<Props>(), {
+    show: false,
+    source: 'password',
+    keyValue: 'pass'
+})
 const emit = defineEmits(['onShowClickEmit'])
 
 const onBttnClick = () => emit('onShowClickEmit', props.keyValue)
 const getAriaLabel = computed(() => {
-    let label = props.show ? 'Hide' : 'Show'
+    const label = props.show ? 'Hide' : 'Show'
     return `${label} ${props.source}`
 })
 

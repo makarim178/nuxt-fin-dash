@@ -1,3 +1,4 @@
+import { serverSupabaseUser } from '#supabase/server'
 import { getAccountsOverviewReport } from '~~/server/supabase/queries/accountsQuery'
 import { listAccountsOverviewReturnSchema } from '#shared/types/accounts'
 import type { ListAccountsOverviewReturnSchema, AccountsOverviewReturnSchema } from '#shared/types/accounts'
@@ -20,9 +21,11 @@ const calcDiff = (oldObj: AccHistResponseSchema, newObj: AccountsOverviewReturnS
 
 export default defineEventHandler( async (event) => {
     try {        
-        const { userId }: { userId: number } = getQuery(event)
-        if (typeof +userId !== 'number' || !userId) throw new Error('UserId as Number required!')    
-        const analysis = await getAccountsOverviewReport(+userId)
+        // const { userId }: { userId: number } = getQuery(event)
+        const user = await serverSupabaseUser(event)
+        if (!user?.id) throw new Error('User Id is not defined')
+
+        const analysis = await getAccountsOverviewReport(user.id)
         const result = analysis.reduce((acc: ListAccountsOverviewReturnSchema, row) => {
             const objExistsIndex: number = acc.findIndex((el) => el.year == row.year && el.title == row.issueType)
             const obj = {

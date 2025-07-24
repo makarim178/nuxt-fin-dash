@@ -1,6 +1,6 @@
 import { db } from '@@/server/db-services'
 import { userRoleTypes } from '#shared/types'
-import type { InsertUserRoleSchema, UserRoleSchema } from '#shared/types'
+import type { InsertUserRoleSchema } from '#shared/types'
 
 export const getRoles = async (): Promise<{id: number; role: string}[]> => await db.select({
     id: userRoleTypes.id,

@@ -1,9 +1,9 @@
-<script setup lang="ts">
-const toasterProp = {
-  position: 'bottom-right'
- }
+<!-- <script setup lang="ts">
+// const toasterProp = {
+//   position: 'bottom-right'
+//  }
 
-</script>
+</script> -->
 
 <template>
   <div>

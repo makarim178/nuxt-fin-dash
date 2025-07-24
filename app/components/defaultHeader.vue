@@ -27,8 +27,8 @@
                     <UDropdownMenu
                         arrow
                         :items="items"
-                        :ui="{ content: 'w-48'}"
-                    >
+                        :ui="{ content: 'w-48 bg-slate-900'}"
+                        class="cursor-pointer">
                         <UButton icon="material-symbols:keyboard-arrow-down" color="neutral" variant="ghost" />
                     </UDropdownMenu>
                 </div>
