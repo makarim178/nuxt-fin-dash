@@ -20,7 +20,7 @@ const showClickHandler = () => {
   showRef.value = !showRef.value
 }
 
-async function onSubmit(event: FormSubmitEvent<UserAuthLoginSchema>) {
+const onSubmit = async (event: FormSubmitEvent<UserAuthLoginSchema>) => {
   try {
     const { error } = await client.auth.signInWithPassword({
       email: event.data.email,
@@ -30,6 +30,26 @@ async function onSubmit(event: FormSubmitEvent<UserAuthLoginSchema>) {
     console.log(event.data)
     toast.add({ title: 'Success', description: 'Please check your email and confirm registration!', color: 'success' })
     navigateTo('/')
+  } catch (error) {
+    const description = handleToastErrorMsg(error)
+    toast.add({
+      title: 'Failed',
+      color: 'error',
+      description
+    })
+  }
+}
+
+const handleGuestLogin = async () => {
+  try {
+    const { data, error } = await client.auth.signInAnonymously()
+    if (error) throw new Error('Could not login as a guest, please try again later!')
+    console.log(data)
+    toast.add({
+      title: 'Success', 
+      color: 'info',
+      description: 'Thank you for logging in as a Guest user!'
+    })
   } catch (error) {
     const description = handleToastErrorMsg(error)
     toast.add({
@@ -71,13 +91,24 @@ async function onSubmit(event: FormSubmitEvent<UserAuthLoginSchema>) {
           </template>
         </UInput>
       </UFormField>
-      <UButton type="submit" class="cursor-pointer">Login</UButton>
+      <div class="flex justify-between">
+        <UButton type="submit" class="cursor-pointer">Login</UButton>
+        <UButton 
+          type="button"
+          class="cursor-pointer bg-cyan-700 hover:bg-cyan-950 text-white"
+          @click="handleGuestLogin">
+          Continue as a Guest
+        </UButton>
+      </div>
     </UForm>
     <template #footer>
-      <h6 class="text-sm">Not a registered user? Please 
-        <NuxtLink 
-          to="/register" 
-          class="cursor-pointer text-success hover:text-success-500">Register</NuxtLink>.</h6>
+      <div class="flex justify-between">
+        <h6 class="text-sm">Not a registered user? Please 
+          <NuxtLink 
+            to="/register" 
+            class="cursor-pointer text-success hover:text-success-500">Register</NuxtLink>.</h6>
+          <h6>Continue as a Guest</h6>
+      </div>
     </template>
   </UCard>
 </template>

@@ -9,10 +9,10 @@
   <div>
     <NuxtRouteAnnouncer/>
     <NuxtLoadingIndicator />
+    <UApp>
       <NuxtLayout>
-        <UApp>
-          <NuxtPage />
-        </UApp>
+        <NuxtPage />
       </NuxtLayout>
+    </UApp>
   </div>
 </template>
