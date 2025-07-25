@@ -1,6 +1,6 @@
 import { addAcountsOverviewReportRows } from '~~/server/supabase/queries/accountsQuery'
-import { insertAccountsOverviewSchema } from '#shared/types'
-import type { InsertAccountsOverviewSchema }  from '#shared/types'
+import { insertAccountsOverviewSchema } from '#shared/schema'
+import type { InsertAccountsOverviewSchema }  from '#shared/schema'
 import { db } from '@@/server/db-services'
 import { z } from 'zod/v4'
 

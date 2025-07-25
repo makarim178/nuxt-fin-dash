@@ -1,6 +1,6 @@
 import { db } from '@@/server/db-services';
-import { locations } from '#shared/types';
-import type { InsertLocationSchema } from '#shared/types';
+import { locations } from '#shared/schema';
+import type { InsertLocationSchema } from '#shared/schema';
 
 export const addLocations = async (locs: InsertLocationSchema[]): Promise<{ locationId: number}[]> => 
     await db.transaction(async (t) => 

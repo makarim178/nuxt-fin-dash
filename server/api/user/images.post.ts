@@ -1,5 +1,5 @@
 import { addUserImages } from "~~/server/supabase/queries/userImageQuery"
-import { insertUserImageSchema } from "#shared/types"
+import { insertUserImageSchema } from "#shared/schema"
 import { z } from "zod/v4"
 
 const requestBodySchema = z.object({

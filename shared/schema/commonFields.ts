@@ -1,4 +1,5 @@
 import { boolean, timestamp } from "drizzle-orm/pg-core";
+import type { UpdateDeleteAction } from "drizzle-orm/pg-core";
 
 export const creationFields = {
     createdAt: timestamp('created_at', { mode: 'string' }).notNull().defaultNow(),
@@ -11,6 +12,6 @@ export const validityFields = {
 }
 
 export const cascadeOptions = {
-    onDelete: 'cascade' as UpdateDeleteActionType,
+    onDelete: 'cascade' as UpdateDeleteAction,
     // onUpdate: 'cascade' as UpdateDeleteActionType
 }

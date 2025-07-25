@@ -1,9 +1,9 @@
 import { pgTable, serial, varchar, index, uuid } from "drizzle-orm/pg-core";
-import { user } from "./user";
 import { cascadeOptions, creationFields, validityFields } from "./commonFields";
 import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod/v4";
+import { user } from "./user";
 
 export const locations = pgTable('locations', {
     id: serial('id').notNull().primaryKey(),

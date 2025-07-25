@@ -1,10 +1,10 @@
 import { eq } from 'drizzle-orm';
 import { db } from '@@/server/db-services';
-import { user } from '#shared/types';
-import type { InsertUserSchema } from '#shared/types';
+import { user } from '#shared/schema';
+import type { InsertUserSchema } from '#shared/schema';
 
 export const getUser = async (userId: string) => {
-    return await db.query.user.findFirst({
+    const data = await db.query.user.findFirst({
         where: eq(user.id, userId),
         with: {
             locations: true,
@@ -13,6 +13,9 @@ export const getUser = async (userId: string) => {
             images: true
         }
     })
+
+    console.log(data)
+    return data
 }
 
 export const addUser = async (values: InsertUserSchema): Promise<{userId: string}[]> => 

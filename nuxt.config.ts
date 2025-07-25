@@ -25,7 +25,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       userApiUrl: process.env.USER_API_URL || '',
-      dbUrl: process.env.DATABASE_URL
+      dbUrl: process.env.DATABASE_URL,
+      guestUser: process.env.ANNONYMOUSE_ID
     }
   }
 })

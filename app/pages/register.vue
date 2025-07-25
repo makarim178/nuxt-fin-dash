@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { userAuthRegisterSchema } from '../../shared/types';
-import type { TitleSchema, UserAuthRegisterSchema } from '../../shared/types';
+import { userAuthRegisterSchema } from '../../shared/types/user';
+import type { TitleSchema, UserAuthRegisterSchema } from '../../shared/types/user';
 
 const titleRef = ref<TitleSchema[]>(['Mr.', 'Ms.', 'Mrs.'])
 

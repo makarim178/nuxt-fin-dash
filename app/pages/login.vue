@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '@nuxt/ui';
-import { userAuthLoginSchema } from '../../shared/types';
-import type { UserAuthLoginSchema } from '../../shared/types';
+import { userAuthLoginSchema } from '../../shared/types/user';
+import type { UserAuthLoginSchema } from '../../shared/types/user';
+
 definePageMeta({
   layout: 'default'
 })
@@ -44,12 +45,12 @@ const handleGuestLogin = async () => {
   try {
     const { data, error } = await client.auth.signInAnonymously()
     if (error) throw new Error('Could not login as a guest, please try again later!')
-    console.log(data)
     toast.add({
       title: 'Success', 
       color: 'info',
       description: 'Thank you for logging in as a Guest user!'
     })
+    navigateTo('/')
   } catch (error) {
     const description = handleToastErrorMsg(error)
     toast.add({

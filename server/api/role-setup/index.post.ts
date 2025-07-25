@@ -1,5 +1,5 @@
 import { addRoles } from "~~/server/supabase/queries/roleSetupQuery"
-import { insertUserRoleSchema } from "#shared/types"
+import { insertUserRoleSchema } from "#shared/schema"
 import { z } from "zod/v4"
 
 const roleEntrySchema = z.object({ roles: z.array(z.string()).or(z.string())})

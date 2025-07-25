@@ -1,7 +1,7 @@
 import { db } from '@@/server/db-services';
 import { eq, desc } from 'drizzle-orm'
-import type { InsertAccountsOverviewSchema } from '#shared/types'
-import { accountsOverviewReport } from '#shared/types';
+import type { InsertAccountsOverviewSchema } from '#shared/schema'
+import { accountsOverviewReport } from '#shared/schema';
 
 export const addAcountsOverviewReportRows = async (data: InsertAccountsOverviewSchema[]) => 
     await db.transaction(async (tx) => 

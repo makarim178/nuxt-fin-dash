@@ -1,32 +1,5 @@
-import { integer, pgTable, serial, real, timestamp, uuid } from "drizzle-orm/pg-core";
-import { cascadeOptions, creationFields } from "./commonFields";
-import { relations } from "drizzle-orm";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { user, userSchema } from "./user";
-import { payeeAccountsHolders, payeeAccountsHolderSchema } from "./payeeAccountsHolders";
+import { payeeAccountsHolderSchema, transactionHistorySchema, userSchema } from '../schema'
 
-export const transactionHistory = pgTable('transactionHistory', {
-    id: serial('id').notNull().primaryKey(),
-    userId: uuid('user_id').references(() => user.id, cascadeOptions),
-    payeeAccountId: integer('payee_account_id').references(() => payeeAccountsHolders.id, cascadeOptions),
-    amount: real('amount'),
-    payDate: timestamp('payDate').notNull().defaultNow(),
-    ...creationFields
-})
-
-export const transactionsRelations = relations(transactionHistory, ({one}) => ({
-    user: one(user, {
-        fields: [transactionHistory.userId],
-        references: [user.id]
-    }),
-    payee: one(payeeAccountsHolders, {
-        fields: [transactionHistory.payeeAccountId],
-        references: [payeeAccountsHolders.id]
-    })
-}))
-
-export const transactionHistorySchema = createSelectSchema(transactionHistory)
-export const insertTransactionHistorySchema = createInsertSchema(transactionHistory)
 export const transactionHisWithRelationSchema = transactionHistorySchema.extend({
     user: userSchema,
     payee: payeeAccountsHolderSchema

@@ -5,7 +5,7 @@ if (!dbUrl) throw new Error('DATABASE URL is REQUIRED')
 
 export default defineConfig({
     dialect: 'postgresql',
-    schema: './shared/types',
+    schema: './shared/schema',
     out: './supabase/drizzle',
     dbCredentials: {
         url: dbUrl,

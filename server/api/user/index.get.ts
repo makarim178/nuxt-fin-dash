@@ -1,4 +1,5 @@
 import { serverSupabaseUser } from '#supabase/server'
+import { z } from 'zod/v4'
 import { getUser } from "~~/server/supabase/queries/userQuery"
 // import { z } from "zod/v4"
 // import userData from "@/utils/user-data"
@@ -9,14 +10,14 @@ import { getUser } from "~~/server/supabase/queries/userQuery"
 
 export default defineEventHandler(async (event) => {
     try {
+        const config = useRuntimeConfig()
         const user = await serverSupabaseUser(event)
         // const { userId } = await getValidatedQuery(event, requestBodySchema.parse)
         // console.log(userId)
-        console.dir(user)
         if (!user?.id) throw new Error('User Id is not defined!')
         const { id, is_anonymous } = user
-        if (is_anonymous) {}
-        return await getUser(id)       
+        let userId = z.uuid().parse(is_anonymous ? config.public.guestUser : id)
+        return await getUser(userId)
     } catch (error) {
         if (error instanceof Error) {
             throw createError({

@@ -3,8 +3,8 @@ import { addUserImages } from "~~/server/supabase/queries/userImageQuery"
 import { addUser, getUser } from "~~/server/supabase/queries/userQuery"
 import { 
     insertUserImageSchema, 
-    insertUserSchema, 
-    userRegisterBodySchema } from "#shared/types"
+    insertUserSchema } from "#shared/schema"
+import { userRegisterBodySchema } from "#shared/types/user"
 import { db } from "~~/server/db-services"
 import { getRandomUserImage } from "~~/server/utils/user-utils"
 import { serverSupabaseClient } from '#supabase/server'

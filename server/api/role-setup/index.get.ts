@@ -1,5 +1,5 @@
 import { getRoles } from "~~/server/supabase/queries/roleSetupQuery"
-import { rolesSelectResponseSchema } from "~~/shared/types";
+import { rolesSelectResponseSchema } from "~~/shared/types/userRoleTypes";
 
 export default defineEventHandler(async () => {
   try {

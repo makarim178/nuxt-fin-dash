@@ -19,7 +19,8 @@
                     </div>
                 </div>
                 <div v-else class="flex gap-3 items-center pl-8">
-                    <UAvatar :src="user.imageUrl ?? ''" size="xl"/>
+                    <UAvatar v-if="user.isImage" :src="user.imageUrl ?? ''" size="xl" class="avatar"/>
+                    <UAvatar v-else="user.isImage" :icon="user.imageUrl ?? ''" size="xl" class="avatar"/>
                     <div class="w-full flex flex-col">
                         <h5 class="text-sm">{{ user?.titleName}}</h5>
                         <span class="text-xs text-amber-50/40">{{ user?.email }}</span>
@@ -38,8 +39,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { UserWithRelationSchema, UserContactSchema } from '../../shared/types/index'
-import { userWithRelations } from '../../shared/types/index'
+
+import { userContactSchema, userImageSchema } from '../../shared/schema/index'
+import type { UserContactSchema } from '../../shared/schema/index'
+import type { UserWithRelationSchema } from '../../shared/types/user'
+import { userWithRelations } from '../../shared/types/user'
 
 import type { DropdownMenuItem } from '@nuxt/ui'
 const client = useSupabaseClient()
@@ -113,7 +117,8 @@ const { data: user, pending }  = useLazyFetch('/api/user', {
         return { 
             titleName, 
             email: filteredContact ? filteredContact.contact : '', 
-            imageUrl: userImage ? userImage.imageUrl : '' 
+            isImage: !!userImage.imageUrl,
+            imageUrl: userImage.imageUrl ? userImage.imageUrl : 'heroicons:user-solid'
         }
     }
 })
