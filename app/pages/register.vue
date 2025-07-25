@@ -58,7 +58,7 @@ const showClickHandler = (key:string) => {
 <template>
   <UCard variant="subtle" class="w-1/2">
     <template #header>
-      <h4>User Registration</h4>
+      <h4 class="flex justify-center">User Registration</h4>
     </template>
     <UForm 
       :schema="userAuthRegisterSchema"
@@ -128,7 +128,7 @@ const showClickHandler = (key:string) => {
         </UInput>
       </UFormField>
       <div class="flex justify-end">
-        <UButton type="submit" size="xl" class="cursor-pointer">Register</UButton>
+        <UButton type="submit" size="xl" class="cursor-pointer w-1/3 justify-center">Register</UButton>
       </div>
     </UForm>
     <template #footer>

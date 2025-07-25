@@ -28,8 +28,7 @@ const onSubmit = async (event: FormSubmitEvent<UserAuthLoginSchema>) => {
       password: event.data.password
     })
     if (error) throw error
-    console.log(event.data)
-    toast.add({ title: 'Success', description: 'Please check your email and confirm registration!', color: 'success' })
+    toast.add({ title: 'Success', color: 'success', description: 'Please check your email and confirm registration!' })
     navigateTo('/')
   } catch (error) {
     const description = handleToastErrorMsg(error)
@@ -47,7 +46,7 @@ const handleGuestLogin = async () => {
     if (error) throw new Error('Could not login as a guest, please try again later!')
     toast.add({
       title: 'Success', 
-      color: 'info',
+      color: 'success',
       description: 'Thank you for logging in as a Guest user!'
     })
     navigateTo('/')
@@ -64,9 +63,9 @@ const handleGuestLogin = async () => {
 </script>
 
 <template>
-  <UCard variant="subtle" class="w-1/2">
+  <UCard variant="subtle" class="w-1/3">
     <template #header>
-      <h4>User Registration</h4>
+      <h4 class="flex justify-center">User Registration</h4>
     </template>
     <UForm 
       :schema="userAuthLoginSchema"
@@ -92,11 +91,11 @@ const handleGuestLogin = async () => {
           </template>
         </UInput>
       </UFormField>
-      <div class="flex justify-between">
-        <UButton type="submit" class="cursor-pointer">Login</UButton>
+      <div class="flex justify-between gap-4">
+        <UButton type="submit" class="cursor-pointer w-full justify-center">Login</UButton>
         <UButton 
           type="button"
-          class="cursor-pointer bg-cyan-700 hover:bg-cyan-950 text-white"
+          class="cursor-pointer bg-cyan-700 hover:bg-cyan-950 text-white w-full justify-center"
           @click="handleGuestLogin">
           Continue as a Guest
         </UButton>
@@ -108,7 +107,6 @@ const handleGuestLogin = async () => {
           <NuxtLink 
             to="/register" 
             class="cursor-pointer text-success hover:text-success-500">Register</NuxtLink>.</h6>
-          <h6>Continue as a Guest</h6>
       </div>
     </template>
   </UCard>
