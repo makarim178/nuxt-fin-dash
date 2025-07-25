@@ -19,8 +19,8 @@
                     </div>
                 </div>
                 <div v-else class="flex gap-3 items-center pl-8">
-                    <UAvatar v-if="user.isImage" :src="user.imageUrl ?? ''" size="xl" class="avatar"/>
-                    <UAvatar v-else="user.isImage" :icon="user.imageUrl ?? ''" size="xl" class="avatar"/>
+                    <UAvatar v-if="user?.isImage" :src="user.imageUrl ?? ''" size="xl" class="avatar"/>
+                    <UAvatar v-else="user.isImage" :icon="user?.imageUrl ?? ''" size="xl" class="avatar"/>
                     <div class="w-full flex flex-col">
                         <h5 class="text-sm">{{ user?.titleName}}</h5>
                         <span class="text-xs text-amber-50/40">{{ user?.email }}</span>

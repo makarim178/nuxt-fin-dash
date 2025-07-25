@@ -1,7 +1,7 @@
 import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
 import { creationFields } from "./commonFields";
 import { relations } from "drizzle-orm";
-import { user } from "./user";
+import { users } from "./users";
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { z } from "zod/v4";
 
@@ -12,9 +12,9 @@ export const userRoleTypes = pgTable('userRoleTypes', {
 })
 
 export const roleTypesRelations = relations(userRoleTypes, ({ one }) => ({
-    user: one(user, {
+    user: one(users, {
         fields: [userRoleTypes.id],
-        references: [user.roleTypeId]
+        references: [users.roleTypeId]
     })
 }))
 

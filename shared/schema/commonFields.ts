@@ -2,8 +2,8 @@ import { boolean, timestamp } from "drizzle-orm/pg-core";
 import type { UpdateDeleteAction } from "drizzle-orm/pg-core";
 
 export const creationFields = {
-    createdAt: timestamp('created_at', { mode: 'string' }).notNull().defaultNow(),
-    updatedAt: timestamp('updated_at', { mode: 'string'}).notNull().defaultNow()
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow()
 }
 
 export const validityFields = {

@@ -6,10 +6,12 @@ import { userImages } from "./userImages";
 import { locations } from "./locations";
 import { userContacts } from "./userContacts";
 
-import { z } from "zod/v4";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { cards } from "./cards";
+import { accounts } from "./account";
+import { z } from "zod/v4";
 
-export const user = pgTable('user', {
+export const users = pgTable('users', {
     id: uuid().notNull().unique().primaryKey(),
     title: varchar('title', { length: 5 }),
     firstName: varchar('first_name', { length: 255 }),
@@ -21,21 +23,23 @@ export const user = pgTable('user', {
     index('last_name').on(table.lastName),
 ])
 
-export const userRelations = relations(user, ({one, many}) => ({
+export const userRelations = relations(users, ({one, many}) => ({
     role: one(userRoleTypes, {
-        fields: [user.roleTypeId],
+        fields: [users.roleTypeId],
         references: [userRoleTypes.id]
     }),
     images: many(userImages),
     contacts: many(userContacts),
-    locations: many(locations)
+    locations: many(locations),
+    cards: many(cards),
+    accounts: many(accounts)
 }))
 
-export const userSchema = createSelectSchema(user, {
+export const userSchema = createSelectSchema(users, {
     roleTypeId: (schema) => schema.min(1),
 })
 
-export const insertUserSchema = createInsertSchema(user, {
+export const insertUserSchema = createInsertSchema(users, {
     roleTypeId: (schema) => schema.min(1)
 })
 

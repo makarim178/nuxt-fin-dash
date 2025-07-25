@@ -1,11 +1,11 @@
 import { eq } from 'drizzle-orm';
 import { db } from '@@/server/db-services';
-import { user } from '#shared/schema';
+import { users } from '#shared/schema';
 import type { InsertUserSchema } from '#shared/schema';
 
 export const getUser = async (userId: string) => {
-    const data = await db.query.user.findFirst({
-        where: eq(user.id, userId),
+    const data = await db.query.users.findFirst({
+        where: eq(users.id, userId),
         with: {
             locations: true,
             contacts: true,
@@ -19,4 +19,4 @@ export const getUser = async (userId: string) => {
 }
 
 export const addUser = async (values: InsertUserSchema): Promise<{userId: string}[]> => 
-    await db.transaction(async (t) => await t.insert(user).values(values).returning({ userId: user.id}))
+    await db.transaction(async (t) => await t.insert(users).values(values).returning({ userId: users.id}))
