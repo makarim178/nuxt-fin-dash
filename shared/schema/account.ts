@@ -1,12 +1,12 @@
-import { decimal, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
-import { users } from "./users";
-import { cascadeOptions } from "./commonFields";
-import { accountsType } from "./accountsType";
-import { relations } from "drizzle-orm";
-import { z } from "zod/v4";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { transactions } from "./transactions";
-import { cards } from "./cards";
+import { decimal, pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { users } from './users';
+import { cascadeOptions } from './commonFields';
+import { accountsType } from './accountsType';
+import { relations } from 'drizzle-orm';
+import { z } from 'zod/v4';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { transactions } from './transactions';
+import { cards } from './cards';
 
 export const accounts = pgTable('accounts', {
     accountId: uuid('account_id').primaryKey().defaultRandom(),

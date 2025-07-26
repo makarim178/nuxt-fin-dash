@@ -1,9 +1,9 @@
-import { pgTable, uuid, varchar, text, decimal } from "drizzle-orm/pg-core";
-import { creationFields } from "./commonFields";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import type { z } from "zod/v4";
-import { relations } from "drizzle-orm";
-import { accounts } from "./account";
+import { pgTable, uuid, varchar, text, decimal } from 'drizzle-orm/pg-core';
+import { creationFields } from './commonFields';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import type { z } from 'zod/v4';
+import { relations } from 'drizzle-orm';
+import { accounts } from './account';
 
 export const accountsType = pgTable('accountsType', {
     typeId: uuid('type_id').primaryKey().defaultRandom(),

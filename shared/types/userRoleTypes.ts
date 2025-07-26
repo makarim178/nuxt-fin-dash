@@ -1,6 +1,6 @@
 
-import { z } from "zod/v4";
-import { userRoleSchema } from "../schema";
+import { z } from 'zod/v4';
+import { userRoleSchema } from '../schema';
 
 
 export type RolesSelectResponseSchema = z.output<typeof rolesSelectResponseSchema>

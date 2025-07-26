@@ -1,20 +1,26 @@
-import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
-import { users } from "./users";
-import { accounts } from "./account";
-import type { CardType } from "../types/cardTypes";
-import type { CardStatusType } from "../types/cardStatusType";
-import { relations } from "drizzle-orm";
+import { pgTable, decimal, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { users } from './users';
+import { accounts } from './account';
+import { relations } from 'drizzle-orm';
+import type { CardNetwork } from '../types/cardTypes';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import type { z } from 'zod/v4';
 
 export const cards = pgTable('cards', {
-    cardId: uuid('card_id').primaryKey().defaultRandom(),
-    userId: uuid('user_id').notNull().references(() => users.id),
-    accountId: uuid('account_id').notNull().references(() => accounts.accountId),
-    cardNumber: varchar('card_number', { length: 16 }).notNull().unique(),
-    cardType: varchar('card_type', { length: 20}).notNull().$type<CardType>(),
-    expiryDate: timestamp('expiry_date').notNull(),
-    cvv: varchar('cvv', { length : 4 }).notNull(),
-    status: varchar('status', {length: 20}).notNull().$type<CardStatusType>().default('active'),
-    issuedAt: timestamp('issued_at', { withTimezone: true}).defaultNow()
+  cardId: uuid('card_id').primaryKey().defaultRandom(),
+  cardNumber: varchar('card_number', { length: 20 }).notNull().unique(),
+  cardType: varchar('card_type', { length: 20 }).notNull().$type<typeof cardTypeEnum>(),
+  cardStatus: varchar('card_status', { length: 20 }).notNull().$type<typeof cardStatusEnum>(),
+  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  accountId: uuid('account_id').notNull().references(() => accounts.accountId, { onDelete: 'cascade' }),
+  limitAmount: decimal('limit_amount', { precision: 12, scale: 2 }),
+  dailyLimit: decimal('daily_limit', { precision: 12, scale: 2 }),
+  billingCycleDay: varchar('billing_cycle_day', { length: 2 }),
+  cardNetwork: varchar('card_network', { length: 20 }).notNull().$type<CardNetwork>(),
+  expirationDate: timestamp('expiration_date', { withTimezone: true }),
+  activatedAt: timestamp('activated_at', { withTimezone: true }),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 })
 
 export const cardRelations = relations(cards, ({ one }) => ({
@@ -27,3 +33,9 @@ export const cardRelations = relations(cards, ({ one }) => ({
         references: [accounts.accountId]
     })
 }))
+
+export const cardsSchema = createSelectSchema(cards)
+export const insertCardSchema = createInsertSchema(cards)
+
+export type CardsSchema = z.infer<typeof cardsSchema>
+export type InsertCardSchema = z.infer<typeof insertCardSchema>

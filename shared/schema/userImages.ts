@@ -1,9 +1,9 @@
-import { pgTable, serial, varchar, uuid } from "drizzle-orm/pg-core";
-import { users } from "./users";
-import { cascadeOptions, creationFields } from "./commonFields";
-import { relations } from "drizzle-orm";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import type { z } from "zod/v4";
+import { pgTable, serial, varchar, uuid } from 'drizzle-orm/pg-core';
+import { users } from './users';
+import { cascadeOptions, creationFields } from './commonFields';
+import { relations } from 'drizzle-orm';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import type { z } from 'zod/v4';
 
 export const userImages = pgTable('userImages', {
     id: serial('id').notNull().primaryKey(),

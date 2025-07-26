@@ -31,16 +31,41 @@ CREATE TABLE "accountsType" (
 	CONSTRAINT "accountsType_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
+CREATE TABLE "card_transactions" (
+	"transaction_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"card_id" uuid NOT NULL,
+	"account_id" uuid NOT NULL,
+	"amount" numeric(12, 2) NOT NULL,
+	"currency" varchar(3) NOT NULL,
+	"merchant" varchar(100) NOT NULL,
+	"location" varchar(100),
+	"category" varchar(50),
+	"transaction_type" varchar(20) NOT NULL,
+	"status" varchar(20) NOT NULL,
+	"reference_id" varchar(50) NOT NULL,
+	"raw_payload" jsonb,
+	"authorized_at" timestamp with time zone,
+	"executed_at" timestamp with time zone NOT NULL,
+	"settled_at" timestamp with time zone,
+	"created_at" timestamp with time zone DEFAULT now(),
+	CONSTRAINT "card_transactions_reference_id_unique" UNIQUE("reference_id")
+);
+--> statement-breakpoint
 CREATE TABLE "cards" (
 	"card_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"card_number" varchar(20) NOT NULL,
+	"card_type" varchar(20) NOT NULL,
+	"card_status" varchar(20) NOT NULL,
 	"user_id" uuid NOT NULL,
 	"account_id" uuid NOT NULL,
-	"card_number" varchar(16) NOT NULL,
-	"card_type" varchar(20) NOT NULL,
-	"expiry_date" timestamp NOT NULL,
-	"cvv" varchar(4) NOT NULL,
-	"status" varchar(20) DEFAULT 'active' NOT NULL,
-	"issued_at" timestamp with time zone DEFAULT now(),
+	"limit_amount" numeric(12, 2),
+	"daily_limit" numeric(12, 2),
+	"billing_cycle_day" varchar(2),
+	"card_network" varchar(20) NOT NULL,
+	"expiration_date" timestamp with time zone,
+	"activated_at" timestamp with time zone,
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now(),
 	CONSTRAINT "cards_card_number_unique" UNIQUE("card_number")
 );
 --> statement-breakpoint
@@ -137,8 +162,10 @@ CREATE TABLE "transactions" (
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_account_type_id_accountsType_type_id_fk" FOREIGN KEY ("account_type_id") REFERENCES "public"."accountsType"("type_id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "accountOverviewReport" ADD CONSTRAINT "accountOverviewReport_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "cards" ADD CONSTRAINT "cards_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "cards" ADD CONSTRAINT "cards_account_id_accounts_account_id_fk" FOREIGN KEY ("account_id") REFERENCES "public"."accounts"("account_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "card_transactions" ADD CONSTRAINT "card_transactions_card_id_cards_card_id_fk" FOREIGN KEY ("card_id") REFERENCES "public"."cards"("card_id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "card_transactions" ADD CONSTRAINT "card_transactions_account_id_accounts_account_id_fk" FOREIGN KEY ("account_id") REFERENCES "public"."accounts"("account_id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "cards" ADD CONSTRAINT "cards_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "cards" ADD CONSTRAINT "cards_account_id_accounts_account_id_fk" FOREIGN KEY ("account_id") REFERENCES "public"."accounts"("account_id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "locations" ADD CONSTRAINT "locations_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "payeeAccountsHolders" ADD CONSTRAINT "payeeAccountsHolders_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "transactionHistory" ADD CONSTRAINT "transactionHistory_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint

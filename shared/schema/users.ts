@@ -1,15 +1,15 @@
-import { integer, pgTable, index, varchar, uuid } from "drizzle-orm/pg-core";
-import { cascadeOptions, creationFields } from "./commonFields";
-import { userRoleTypes } from "./userRoleTypes";
-import { relations } from "drizzle-orm";
-import { userImages } from "./userImages";
-import { locations } from "./locations";
-import { userContacts } from "./userContacts";
+import { integer, pgTable, index, varchar, uuid } from 'drizzle-orm/pg-core';
+import { cascadeOptions, creationFields } from './commonFields';
+import { userRoleTypes } from './userRoleTypes';
+import { relations } from 'drizzle-orm';
+import { userImages } from './userImages';
+import { locations } from './locations';
+import { userContacts } from './userContacts';
 
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { cards } from "./cards";
-import { accounts } from "./account";
-import { z } from "zod/v4";
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { cards } from './cards';
+import { accounts } from './account';
+import { z } from 'zod/v4';
 
 export const users = pgTable('users', {
     id: uuid().notNull().unique().primaryKey(),

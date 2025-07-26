@@ -1,9 +1,9 @@
-import { integer, pgTable, serial, real, timestamp, uuid } from "drizzle-orm/pg-core";
-import { cascadeOptions, creationFields } from "./commonFields";
-import { relations } from "drizzle-orm";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { users } from "./users";
-import { payeeAccountsHolders } from "./payeeAccountsHolders";
+import { integer, pgTable, serial, real, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { cascadeOptions, creationFields } from './commonFields';
+import { relations } from 'drizzle-orm';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { users } from './users';
+import { payeeAccountsHolders } from './payeeAccountsHolders';
 
 export const transactionHistory = pgTable('transactionHistory', {
     id: serial('id').notNull().primaryKey(),

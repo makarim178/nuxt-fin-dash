@@ -1,8 +1,8 @@
-import { pgTable, serial, varchar, index, uniqueIndex, uuid } from "drizzle-orm/pg-core";
-import { cascadeOptions, creationFields, validityFields } from "./commonFields";
-import { users } from "./users";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import type { z } from "zod/v4";
+import { pgTable, serial, varchar, index, uniqueIndex, uuid } from 'drizzle-orm/pg-core';
+import { cascadeOptions, creationFields, validityFields } from './commonFields';
+import { users } from './users';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import type { z } from 'zod/v4';
 
 export const payeeAccountsHolders = pgTable('payeeAccountsHolders', {
     id: serial('id').notNull().primaryKey(),

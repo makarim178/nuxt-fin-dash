@@ -1,9 +1,9 @@
-import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
-import { creationFields } from "./commonFields";
-import { relations } from "drizzle-orm";
-import { users } from "./users";
+import { pgTable, serial, varchar } from 'drizzle-orm/pg-core';
+import { creationFields } from './commonFields';
+import { relations } from 'drizzle-orm';
+import { users } from './users';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
-import { z } from "zod/v4";
+import { z } from 'zod/v4';
 
 export const userRoleTypes = pgTable('userRoleTypes', {
     id: serial('id').notNull().primaryKey(),

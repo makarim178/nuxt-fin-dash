@@ -1,5 +1,5 @@
-import { locationSchema, userContactSchema, userRoleSchema, userImageSchema, userSchema, insertUserSchema, insertLocationSchema, insertUserContactSchema } from "../schema";
-import { z } from "zod/v4";
+import { locationSchema, userContactSchema, userRoleSchema, userImageSchema, userSchema, insertUserSchema, insertLocationSchema, insertUserContactSchema } from '../schema';
+import { z } from 'zod/v4';
 
 export const userWithRelations = userSchema.extend({
     role: userRoleSchema,

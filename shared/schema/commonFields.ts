@@ -1,5 +1,5 @@
-import { boolean, timestamp } from "drizzle-orm/pg-core";
-import type { UpdateDeleteAction } from "drizzle-orm/pg-core";
+import { boolean, timestamp } from 'drizzle-orm/pg-core';
+import type { UpdateDeleteAction } from 'drizzle-orm/pg-core';
 
 export const creationFields = {
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),

@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { z } from 'zod/v4';
 
 export const accountsOverviewReturnSchema = z.object({
     month: z.number().min(1).max(12).optional(),
