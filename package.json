@@ -37,7 +37,9 @@
     "@nuxt/eslint": "^1.7.0",
     "@nuxt/eslint-config": "^1.5.2",
     "@nuxtjs/supabase": "^1.6.0",
+    "dotenv": "^17.2.1",
     "drizzle-kit": "^0.31.4",
+    "drizzle-seed": "^0.3.1",
     "eslint": "^9.31.0",
     "tsx": "^4.20.3"
   }

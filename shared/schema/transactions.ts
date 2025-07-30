@@ -3,8 +3,8 @@ import { accounts } from './account'
 import { creationFields } from './commonFields'
 import { relations } from 'drizzle-orm'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
-import type { transactionTypeEnum } from '../types/transactionType'
-import { z } from 'zod/v4'
+import type { transactionTypeEnum } from '../types/enums'
+import type { z } from 'zod/v4'
 
 export const transactions = pgTable('transactions', {
     transactionId: uuid('transaction_id').primaryKey().defaultRandom(),

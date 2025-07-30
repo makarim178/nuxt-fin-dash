@@ -9,14 +9,14 @@ import { userContacts } from './userContacts';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { cards } from './cards';
 import { accounts } from './account';
-import { z } from 'zod/v4';
+import type { z } from 'zod/v4';
 
 export const users = pgTable('users', {
     id: uuid().notNull().unique().primaryKey(),
     title: varchar('title', { length: 5 }),
     firstName: varchar('first_name', { length: 255 }),
     lastName: varchar('last_name', { length: 255 }),
-    roleTypeId: integer('roleTypeId').notNull().references(() => userRoleTypes.id, cascadeOptions),
+    roleTypeId: integer('role_type_id').references(() => userRoleTypes.id, cascadeOptions),
     ...creationFields
 }, (table) => [
     index('first_name').on(table.firstName),

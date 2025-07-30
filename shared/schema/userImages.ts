@@ -1,4 +1,4 @@
-import { pgTable, serial, varchar, uuid } from 'drizzle-orm/pg-core';
+import { pgTable, serial, varchar, uuid, boolean } from 'drizzle-orm/pg-core';
 import { users } from './users';
 import { cascadeOptions, creationFields } from './commonFields';
 import { relations } from 'drizzle-orm';
@@ -9,6 +9,7 @@ export const userImages = pgTable('userImages', {
     id: serial('id').notNull().primaryKey(),
     userId: uuid('user_id').notNull().references(() => users.id, cascadeOptions),
     imageUrl: varchar('image_url', { length: 255 }),
+    isPrimary: boolean('is_primary').default(false),
     ...creationFields
 })
 

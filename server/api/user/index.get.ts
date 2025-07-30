@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
         // console.log(userId)
         if (!user?.id) throw new Error('User Id is not defined!')
         const { id, is_anonymous } = user
-        let userId = z.uuid().parse(is_anonymous ? config.public.guestUser : id)
+        const userId = z.uuid().parse(is_anonymous ? config.public.guestUser : id)
         return await getUser(userId)
     } catch (error) {
         if (error instanceof Error) {

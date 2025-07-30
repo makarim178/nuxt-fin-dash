@@ -42,7 +42,7 @@ const onSubmit = async (event: FormSubmitEvent<UserAuthLoginSchema>) => {
 
 const handleGuestLogin = async () => {
   try {
-    const { data, error } = await client.auth.signInAnonymously()
+    const { error } = await client.auth.signInAnonymously()
     if (error) throw new Error('Could not login as a guest, please try again later!')
     toast.add({
       title: 'Success', 

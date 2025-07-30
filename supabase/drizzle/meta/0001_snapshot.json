@@ -1,6 +1,6 @@
 {
-  "id": "25ef1e6c-71ed-4733-8130-ca31f4edaf5c",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "3226b52f-941f-48c0-9125-7a7684b84f89",
+  "prevId": "25ef1e6c-71ed-4733-8130-ca31f4edaf5c",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -275,15 +275,7 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "accountsType_name_unique": {
-          "name": "accountsType_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
