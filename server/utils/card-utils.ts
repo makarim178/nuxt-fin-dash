@@ -1,3 +1,5 @@
+import { CardNetwork } from "~~/shared/types/enums"
+
 export const generateCardNumber = (iin = '400000'): string => {
   const accountIdentifier = Array.from({ length: 9 }, () =>
     Math.floor(Math.random() * 10)
@@ -31,7 +33,7 @@ export const generateExpiryDate = (): Date => {
   return new Date(now.getFullYear() + 4, now.getMonth(), 1) // 4 years validity
 }
 
-export const generateRandomIIN = (network: 'visa' | 'mastercard' | 'amex' | 'discover' = 'visa'): string => {
+export const generateRandomIIN = (network: CardNetwork): string => {
   const prefixes = ['51', '52', '53', '54', '55']
   const prefix = prefixes[Math.floor(Math.random() * prefixes.length)]
   const amexPrefix = ['34', '37'][Math.floor(Math.random() * 2)]
@@ -50,8 +52,8 @@ export const generateRandomIIN = (network: 'visa' | 'mastercard' | 'amex' | 'dis
 }
 
 export const generateRandomCardNumber = () => {
-  const network: ('visa' | 'mastercard' | 'amex' | 'discover')[] = ['visa', 'mastercard', 'amex', 'discover']
-  const selectRandomNetworkIndex = Math.random() * network.length
+  const network: CardNetwork[] = ['visa', 'mastercard', 'amex', 'discover']
+  const selectRandomNetworkIndex = Math.floor(Math.random() * network.length)
   const iin = generateRandomIIN(network[selectRandomNetworkIndex])
   return generateCardNumber(iin)
 }
