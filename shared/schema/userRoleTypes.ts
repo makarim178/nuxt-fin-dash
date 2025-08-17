@@ -4,7 +4,7 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import type { userRoleEnum } from '../types/enums';
 import type { z } from 'zod/v4';
 
-export const userRoleTypes = pgTable('userRoleTypes', {
+export const userRoleTypes = pgTable('user_role_types', {
     id: serial('id').notNull().primaryKey(),
     role: varchar('role', { length: 100 }).notNull().unique().$type<typeof userRoleEnum>(),
     ...creationFields

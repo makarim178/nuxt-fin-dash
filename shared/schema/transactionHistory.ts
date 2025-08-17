@@ -5,7 +5,7 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { users } from './users';
 import { payeeAccountsHolders } from './payeeAccountsHolders';
 
-export const transactionHistory = pgTable('transactionHistory', {
+export const transactionHistory = pgTable('transaction_history', {
     id: serial('id').notNull().primaryKey(),
     userId: uuid('user_id').references(() => users.id, cascadeOptions),
     payeeAccountId: integer('payee_account_id').references(() => payeeAccountsHolders.id, cascadeOptions),

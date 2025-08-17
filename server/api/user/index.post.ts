@@ -6,7 +6,7 @@ import {
     insertUserSchema } from "#shared/schema"
 import { userRegisterBodySchema } from "#shared/types/user"
 import { db } from "~~/server/db-services"
-import { getRandomUserImage } from "~~/server/utils/user-utils"
+import { generateRandomImage } from "~~/server/utils/user-utils"
 import { serverSupabaseClient } from '#supabase/server'
 import { removeUser } from "~~/server/services/user-utils"
 
@@ -54,7 +54,7 @@ export default defineEventHandler (async (event) => {
             } else {
                 parsedImages = [{
                     userId: uuid,
-                    imageUrl: getRandomUserImage(title ?? 'Mr.')
+                    imageUrl: generateRandomImage(title ?? 'Mr.')
                 }]
             }
             promises.push(addUserImages(parsedImages))

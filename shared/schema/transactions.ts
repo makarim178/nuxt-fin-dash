@@ -1,5 +1,5 @@
 import { decimal, index, pgTable, text, uuid, varchar } from 'drizzle-orm/pg-core'
-import { accounts } from './account'
+import { accounts } from './accounts'
 import { creationFields } from './commonFields'
 import { relations } from 'drizzle-orm'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'

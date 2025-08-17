@@ -1,6 +1,6 @@
 import { pgTable, decimal, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 import { users } from './users';
-import { accounts } from './account';
+import { accounts } from './accounts';
 import { relations } from 'drizzle-orm';
 import type { CardNetwork } from '../types/enums';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';

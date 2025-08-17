@@ -1,14 +1,4 @@
-CREATE TABLE "accounts" (
-	"account_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"user_id" uuid,
-	"account_type_id" uuid,
-	"balance" numeric(15, 2) DEFAULT '0.00',
-	"status" varchar(20) DEFAULT 'active',
-	"opened_at" timestamp with time zone DEFAULT now(),
-	"closed_at" timestamp with time zone
-);
---> statement-breakpoint
-CREATE TABLE "accountOverviewReport" (
+CREATE TABLE "account_overview_report" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" uuid NOT NULL,
 	"month" integer,
@@ -19,7 +9,17 @@ CREATE TABLE "accountOverviewReport" (
 	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE "accountsType" (
+CREATE TABLE "accounts" (
+	"account_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" uuid,
+	"account_type_id" uuid,
+	"balance" numeric(15, 2) DEFAULT '0.00',
+	"status" varchar(20) DEFAULT 'active',
+	"opened_at" timestamp with time zone DEFAULT now(),
+	"closed_at" timestamp with time zone
+);
+--> statement-breakpoint
+CREATE TABLE "accounts_type" (
 	"type_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" varchar(50) NOT NULL,
 	"description" text,
@@ -27,8 +27,7 @@ CREATE TABLE "accountsType" (
 	"interest_rate" numeric(5, 2) DEFAULT '0.00',
 	"monthly_fee" numeric(6, 2) DEFAULT '0.00',
 	"created_at" timestamp with time zone DEFAULT now(),
-	"updated_at" timestamp with time zone DEFAULT now(),
-	CONSTRAINT "accountsType_name_unique" UNIQUE("name")
+	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "card_transactions" (
@@ -83,7 +82,7 @@ CREATE TABLE "locations" (
 	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE "payeeAccountsHolders" (
+CREATE TABLE "payee_accounts_holders" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" uuid NOT NULL,
 	"method_type" varchar NOT NULL,
@@ -96,7 +95,7 @@ CREATE TABLE "payeeAccountsHolders" (
 	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
-CREATE TABLE "transactionHistory" (
+CREATE TABLE "transaction_history" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" uuid,
 	"payee_account_id" integer,
@@ -104,46 +103,6 @@ CREATE TABLE "transactionHistory" (
 	"payDate" timestamp DEFAULT now() NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now(),
 	"updated_at" timestamp with time zone DEFAULT now()
-);
---> statement-breakpoint
-CREATE TABLE "userContacts" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"user_id" uuid NOT NULL,
-	"contact_type" varchar(10),
-	"contact" varchar(255),
-	"country_code" varchar(5),
-	"is_valid" boolean,
-	"is_primary" boolean,
-	"created_at" timestamp with time zone DEFAULT now(),
-	"updated_at" timestamp with time zone DEFAULT now()
-);
---> statement-breakpoint
-CREATE TABLE "userImages" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"user_id" uuid NOT NULL,
-	"image_url" varchar(255),
-	"is_primary" boolean DEFAULT false,
-	"created_at" timestamp with time zone DEFAULT now(),
-	"updated_at" timestamp with time zone DEFAULT now()
-);
---> statement-breakpoint
-CREATE TABLE "userRoleTypes" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"role" varchar(100) NOT NULL,
-	"created_at" timestamp with time zone DEFAULT now(),
-	"updated_at" timestamp with time zone DEFAULT now(),
-	CONSTRAINT "userRoleTypes_role_unique" UNIQUE("role")
-);
---> statement-breakpoint
-CREATE TABLE "users" (
-	"id" uuid PRIMARY KEY NOT NULL,
-	"title" varchar(5),
-	"first_name" varchar(255),
-	"last_name" varchar(255),
-	"role_type_id" integer,
-	"created_at" timestamp with time zone DEFAULT now(),
-	"updated_at" timestamp with time zone DEFAULT now(),
-	CONSTRAINT "users_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
 CREATE TABLE "transactions" (
@@ -158,32 +117,72 @@ CREATE TABLE "transactions" (
 	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
+CREATE TABLE "user_contacts" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"user_id" uuid NOT NULL,
+	"contact_type" varchar(10),
+	"contact" varchar(255),
+	"country_code" varchar(5),
+	"is_valid" boolean,
+	"is_primary" boolean,
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now()
+);
+--> statement-breakpoint
+CREATE TABLE "user_images" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"user_id" uuid NOT NULL,
+	"image_url" varchar(255),
+	"is_primary" boolean DEFAULT false,
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now()
+);
+--> statement-breakpoint
+CREATE TABLE "user_role_types" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"role" varchar(100) NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now(),
+	CONSTRAINT "user_role_types_role_unique" UNIQUE("role")
+);
+--> statement-breakpoint
+CREATE TABLE "users" (
+	"id" uuid PRIMARY KEY NOT NULL,
+	"title" varchar(5),
+	"first_name" varchar(255),
+	"last_name" varchar(255),
+	"role_type_id" integer,
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now(),
+	CONSTRAINT "users_id_unique" UNIQUE("id")
+);
+--> statement-breakpoint
+ALTER TABLE "account_overview_report" ADD CONSTRAINT "account_overview_report_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "accounts" ADD CONSTRAINT "accounts_account_type_id_accountsType_type_id_fk" FOREIGN KEY ("account_type_id") REFERENCES "public"."accountsType"("type_id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "accountOverviewReport" ADD CONSTRAINT "accountOverviewReport_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "accounts" ADD CONSTRAINT "accounts_account_type_id_accounts_type_type_id_fk" FOREIGN KEY ("account_type_id") REFERENCES "public"."accounts_type"("type_id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "card_transactions" ADD CONSTRAINT "card_transactions_card_id_cards_card_id_fk" FOREIGN KEY ("card_id") REFERENCES "public"."cards"("card_id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "card_transactions" ADD CONSTRAINT "card_transactions_account_id_accounts_account_id_fk" FOREIGN KEY ("account_id") REFERENCES "public"."accounts"("account_id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "cards" ADD CONSTRAINT "cards_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "cards" ADD CONSTRAINT "cards_account_id_accounts_account_id_fk" FOREIGN KEY ("account_id") REFERENCES "public"."accounts"("account_id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "locations" ADD CONSTRAINT "locations_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "payeeAccountsHolders" ADD CONSTRAINT "payeeAccountsHolders_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "transactionHistory" ADD CONSTRAINT "transactionHistory_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "transactionHistory" ADD CONSTRAINT "transactionHistory_payee_account_id_payeeAccountsHolders_id_fk" FOREIGN KEY ("payee_account_id") REFERENCES "public"."payeeAccountsHolders"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "userContacts" ADD CONSTRAINT "userContacts_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "userImages" ADD CONSTRAINT "userImages_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "users" ADD CONSTRAINT "users_role_type_id_userRoleTypes_id_fk" FOREIGN KEY ("role_type_id") REFERENCES "public"."userRoleTypes"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "payee_accounts_holders" ADD CONSTRAINT "payee_accounts_holders_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "transaction_history" ADD CONSTRAINT "transaction_history_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "transaction_history" ADD CONSTRAINT "transaction_history_payee_account_id_payee_accounts_holders_id_fk" FOREIGN KEY ("payee_account_id") REFERENCES "public"."payee_accounts_holders"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "transactions" ADD CONSTRAINT "transactions_account_id_accounts_account_id_fk" FOREIGN KEY ("account_id") REFERENCES "public"."accounts"("account_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-CREATE INDEX "month_index" ON "accountOverviewReport" USING btree ("month");--> statement-breakpoint
-CREATE INDEX "year_index" ON "accountOverviewReport" USING btree ("year");--> statement-breakpoint
-CREATE INDEX "issue_type_index" ON "accountOverviewReport" USING btree ("issue_type");--> statement-breakpoint
+ALTER TABLE "user_contacts" ADD CONSTRAINT "user_contacts_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "user_images" ADD CONSTRAINT "user_images_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "users" ADD CONSTRAINT "users_role_type_id_user_role_types_id_fk" FOREIGN KEY ("role_type_id") REFERENCES "public"."user_role_types"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "month_index" ON "account_overview_report" USING btree ("month");--> statement-breakpoint
+CREATE INDEX "year_index" ON "account_overview_report" USING btree ("year");--> statement-breakpoint
+CREATE INDEX "issue_type_index" ON "account_overview_report" USING btree ("issue_type");--> statement-breakpoint
 CREATE INDEX "idx_street_address" ON "locations" USING btree ("street_name");--> statement-breakpoint
 CREATE INDEX "idx_postcode" ON "locations" USING btree ("postcode");--> statement-breakpoint
 CREATE INDEX "idx_city" ON "locations" USING btree ("city");--> statement-breakpoint
 CREATE INDEX "idx_province" ON "locations" USING btree ("province");--> statement-breakpoint
 CREATE INDEX "idx_country" ON "locations" USING btree ("country");--> statement-breakpoint
-CREATE INDEX "payee_name_index" ON "payeeAccountsHolders" USING btree ("payee_name");--> statement-breakpoint
-CREATE UNIQUE INDEX "account_number_index" ON "payeeAccountsHolders" USING btree ("account_number");--> statement-breakpoint
-CREATE INDEX "contact_index" ON "userContacts" USING btree ("contact");--> statement-breakpoint
-CREATE INDEX "first_name" ON "users" USING btree ("first_name");--> statement-breakpoint
-CREATE INDEX "last_name" ON "users" USING btree ("last_name");--> statement-breakpoint
-CREATE INDEX "idx_transactions_account_created" ON "transactions" USING btree ("account_id","created_at");
+CREATE INDEX "payee_name_index" ON "payee_accounts_holders" USING btree ("payee_name");--> statement-breakpoint
+CREATE UNIQUE INDEX "account_number_index" ON "payee_accounts_holders" USING btree ("account_number");--> statement-breakpoint
+CREATE INDEX "idx_transactions_account_created" ON "transactions" USING btree ("account_id","created_at");--> statement-breakpoint
+CREATE INDEX "contact_index" ON "user_contacts" USING btree ("contact");--> statement-breakpoint
+CREATE INDEX "idx_first_name" ON "users" USING btree ("first_name");--> statement-breakpoint
+CREATE INDEX "idx_last_name" ON "users" USING btree ("last_name");

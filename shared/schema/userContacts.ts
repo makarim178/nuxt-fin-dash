@@ -5,7 +5,7 @@ import { relations } from 'drizzle-orm';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod/v4';
 
-export const userContacts = pgTable('userContacts', {
+export const userContacts = pgTable('user_contacts', {
     id: serial('id').notNull().primaryKey(),
     userId: uuid('user_id').notNull().references(() => users.id, cascadeOptions),
     contactType: varchar('contact_type', { length: 10 }),

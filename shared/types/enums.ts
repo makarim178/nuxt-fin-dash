@@ -1,5 +1,12 @@
 import { z } from 'zod/v4';
 
+export const contactsTypes = z.enum([
+    'phone',
+    'email',
+    'mobile',
+    'fax'
+])
+
 export const cardTypeEnum = z.enum([
     'debit',
     'credit',
@@ -57,6 +64,16 @@ export const transactionTypeEnum = z.enum([
     'purchase'
 ])
 
+export const TRANSACTIONT_TYPE_ACTIONS = {
+    'deposit': 'deposited',
+    'withdrawal': 'withdrawn',
+    'transfer': 'transfered',
+    'payment': 'paid',
+    'refund': 'refunded',
+    'fee': 'fee paid',
+    'purchase': 'purchased'
+}
+
 export const transactionStatusEnum = z.enum([
     'pending',
     'authorized',
@@ -84,7 +101,43 @@ export const accountStatusEnum = z.enum([
     'suspended',    // temporarily disabled by admin or fraud system
 ])
 
+export const merchantCategoryEnum = z.enum([
+    'GROCERIES',
+    'GAS & FUEL',
+    'DINING',
+    'TRAVEL',
+    'TRANSPORTATION',
+    'ENTERTAINMENT',
+    'SUBSCRIPTION',
+    'RETAIL',
+    'FUEL',
+    'UTILITIES',
+    'HEALTHCARE',
+    'EDUCATION',
+    'SERVICES',
+    'ELECTRONICS',
+    'HOME_IMPROVEMENT',
+    'E-COMMERCE',
+    'WHOLESALE',
+    'OTHER'
+])
+
+export const cardTransationTypeEnum = z.enum([
+    'AUTHORIZATION',
+    'CAPTURE',
+    'REFUND',
+    'REVERSAL'
+])
+
+export const cardTransactionStatusEnum = z.enum([
+    "PENDING",
+    "SETTLED",
+    "DECLINED",
+    "CANCELED"
+])
+
 export type CardType = z.infer<typeof cardTypeEnum>
+export type ContactsType = z.infer<typeof contactsTypes>
 export type CardStatus = z.infer<typeof cardStatusEnum>;
 export type CardNetwork = z.infer<typeof cardNetworkEnum>;
 export type AccountTypeName = z.infer<typeof accountsTypeNameEnum>
@@ -92,3 +145,6 @@ export type TransactionType = z.infer<typeof transactionTypeEnum>
 export type TransactionStatusType = z.infer<typeof transactionStatusEnum>
 export type UserRoleType = z.infer<typeof userRoleEnum>
 export type AccountStatus = z.infer<typeof accountStatusEnum>
+export type MerchantCategory = z.infer<typeof merchantCategoryEnum>
+export type CardTransactionType = z.infer<typeof cardTransationTypeEnum>
+export type CardTransactionStatus = z.infer<typeof cardTransactionStatusEnum>

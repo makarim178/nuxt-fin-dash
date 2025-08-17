@@ -8,7 +8,7 @@ import { userContacts } from './userContacts';
 
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { cards } from './cards';
-import { accounts } from './account';
+import { accounts } from './accounts';
 import type { z } from 'zod/v4';
 
 export const users = pgTable('users', {
@@ -19,8 +19,8 @@ export const users = pgTable('users', {
     roleTypeId: integer('role_type_id').references(() => userRoleTypes.id, cascadeOptions),
     ...creationFields
 }, (table) => [
-    index('first_name').on(table.firstName),
-    index('last_name').on(table.lastName),
+    index('idx_first_name').on(table.firstName),
+    index('idx_last_name').on(table.lastName),
 ])
 
 export const userRelations = relations(users, ({one, many}) => ({

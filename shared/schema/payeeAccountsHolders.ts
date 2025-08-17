@@ -4,7 +4,7 @@ import { users } from './users';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod/v4';
 
-export const payeeAccountsHolders = pgTable('payeeAccountsHolders', {
+export const payeeAccountsHolders = pgTable('payee_accounts_holders', {
     id: serial('id').notNull().primaryKey(),
     userId: uuid('user_id').notNull().references(() => users.id, cascadeOptions),
     methodType: varchar('method_type').notNull(),

@@ -4,7 +4,7 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod/v4';
 import { users } from './users';
 
-export const accountsOverviewReport = pgTable('accountOverviewReport', {
+export const accountsOverviewReport = pgTable('account_overview_report', {
     id: serial('id').notNull().primaryKey(),
     userId: uuid('user_id').notNull().references(() => users.id, cascadeOptions),
     month: integer('month'),

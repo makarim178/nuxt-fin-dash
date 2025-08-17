@@ -1,6 +1,6 @@
 import { pgTable, uuid, decimal, varchar, jsonb, timestamp } from 'drizzle-orm/pg-core';
 import { cards } from './cards';
-import { accounts } from './account';
+import { accounts } from './accounts';
 import { relations } from 'drizzle-orm';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod/v4';

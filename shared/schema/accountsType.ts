@@ -3,10 +3,10 @@ import { creationFields } from './commonFields';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod/v4';
 import { relations } from 'drizzle-orm';
-import { accounts } from './account';
+import { accounts } from './accounts';
 import type { accountsTypeNameEnum } from '../types/enums';
 
-export const accountsType = pgTable('accountsType', {
+export const accountsType = pgTable('accounts_type', {
     typeId: uuid('type_id').primaryKey().defaultRandom(),
     name: varchar('name', { length: 50 }).notNull().$type<typeof accountsTypeNameEnum>(),
     description: text('description'),
